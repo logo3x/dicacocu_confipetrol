@@ -192,6 +192,118 @@ a:hover { color: var(--text-link-hover); }
   margin-top: var(--space-3);
 }
 
+/* ============================================================
+   ANIMACIONES SGD — Filament panel
+   ============================================================ */
+
+@keyframes sgd-fade-in-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes sgd-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes sgd-scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes sgd-slide-right {
+  from { opacity: 0; transform: translateX(-8px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Stat cards del dashboard */
+.fi-wi-stats-overview-stat {
+  animation: sgd-fade-in-up 0.35s var(--ease-out) both;
+}
+.fi-wi-stats-overview-stat:nth-child(1) { animation-delay: 0.05s; }
+.fi-wi-stats-overview-stat:nth-child(2) { animation-delay: 0.10s; }
+.fi-wi-stats-overview-stat:nth-child(3) { animation-delay: 0.15s; }
+.fi-wi-stats-overview-stat:nth-child(4) { animation-delay: 0.20s; }
+
+/* Hover suave en stat cards */
+.fi-wi-stats-overview-stat {
+  transition: transform 0.2s var(--ease-out), box-shadow 0.2s var(--ease-out);
+}
+.fi-wi-stats-overview-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Widgets al aparecer */
+.fi-wi-chart,
+.fi-wi-table {
+  animation: sgd-scale-in 0.4s var(--ease-out) both;
+}
+
+/* Filas de tablas con entrada escalonada */
+.fi-ta-row {
+  animation: sgd-slide-right 0.25s var(--ease-out) both;
+}
+.fi-ta-row:nth-child(1)  { animation-delay: 0.02s; }
+.fi-ta-row:nth-child(2)  { animation-delay: 0.05s; }
+.fi-ta-row:nth-child(3)  { animation-delay: 0.08s; }
+.fi-ta-row:nth-child(4)  { animation-delay: 0.11s; }
+.fi-ta-row:nth-child(5)  { animation-delay: 0.14s; }
+.fi-ta-row:nth-child(n+6){ animation-delay: 0.17s; }
+
+/* Hover en filas de tabla */
+.fi-ta-row {
+  transition: background-color 0.15s ease;
+}
+
+/* Botones con transición */
+.fi-btn {
+  transition: transform 0.12s var(--ease-out), box-shadow 0.12s var(--ease-out), background-color 0.15s ease;
+}
+.fi-btn:active {
+  transform: scale(0.97);
+}
+
+/* Badges */
+.fi-badge {
+  transition: opacity 0.15s ease;
+}
+
+/* Notificaciones / toasts con entrada */
+.fi-fo-notification {
+  animation: sgd-fade-in-up 0.3s var(--ease-out) both;
+}
+
+/* Sidebar nav items */
+.fi-sidebar-item-button {
+  transition: background-color 0.15s ease, padding-left 0.15s ease;
+}
+.fi-sidebar-item-button:hover {
+  padding-left: calc(var(--space-3) + 2px);
+}
+
+/* Panel header branding */
+.fi-topbar {
+  backdrop-filter: blur(8px);
+}
+
+/* Modal con animación */
+.fi-modal-window {
+  animation: sgd-scale-in 0.25s var(--ease-out) both;
+}
+
+/* Inputs con focus ring Confipetrol */
+.fi-input:focus,
+.fi-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 80, 160, 0.2);
+  border-color: var(--cp-blue-400);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+
+/* Dropdown menus */
+.fi-dropdown-list {
+  animation: sgd-scale-in 0.18s var(--ease-out) both;
+  transform-origin: top right;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
