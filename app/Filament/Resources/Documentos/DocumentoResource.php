@@ -5,7 +5,10 @@ namespace App\Filament\Resources\Documentos;
 use App\Filament\Resources\Documentos\Pages\CreateDocumento;
 use App\Filament\Resources\Documentos\Pages\EditDocumento;
 use App\Filament\Resources\Documentos\Pages\ListDocumentos;
+use App\Filament\Resources\Documentos\Pages\ViewDocumento;
+use App\Filament\Resources\Documentos\RelationManagers\VersionesRelationManager;
 use App\Filament\Resources\Documentos\Schemas\DocumentoForm;
+use App\Filament\Resources\Documentos\Schemas\DocumentoInfolist;
 use App\Filament\Resources\Documentos\Tables\DocumentosTable;
 use App\Models\Documento;
 use BackedEnum;
@@ -24,7 +27,7 @@ class DocumentoResource extends Resource
 
     protected static ?string $navigationLabel = 'Documentos';
 
-    protected static string | \UnitEnum | null $navigationGroup = 'Gestión Documental';
+    protected static string|\UnitEnum|null $navigationGroup = 'Gestión Documental';
 
     protected static ?int $navigationSort = 1;
 
@@ -37,6 +40,11 @@ class DocumentoResource extends Resource
         return DocumentoForm::configure($schema);
     }
 
+    public static function infolist(Schema $schema): Schema
+    {
+        return DocumentoInfolist::configure($schema);
+    }
+
     public static function table(Table $table): Table
     {
         return DocumentosTable::configure($table);
@@ -44,15 +52,18 @@ class DocumentoResource extends Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            VersionesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index'  => ListDocumentos::route('/'),
+            'index' => ListDocumentos::route('/'),
             'create' => CreateDocumento::route('/create'),
-            'edit'   => EditDocumento::route('/{record}/edit'),
+            'view' => ViewDocumento::route('/{record}'),
+            'edit' => EditDocumento::route('/{record}/edit'),
         ];
     }
 

@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\Documentos\Tables;
 
+use App\Filament\Resources\Documentos\DocumentoResource;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -24,37 +26,57 @@ class DocumentosTable
                     ->searchable()
                     ->sortable()
                     ->fontFamily('mono')
-                    ->copyable(),
+                    ->copyable()
+                    ->placeholder('—'),
 
                 TextColumn::make('titulo')
                     ->label('Título')
                     ->searchable()
-                    ->limit(50)
+                    ->limit(55)
                     ->tooltip(fn ($record) => $record->titulo),
 
                 TextColumn::make('tipo_documento')
                     ->label('Tipo')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'procedimiento' => 'Procedimiento',
+                        'instructivo' => 'Instructivo',
+                        'formato' => 'Formato',
+                        'manual' => 'Manual',
+                        'politica' => 'Política',
+                        'norma' => 'Norma',
+                        'reglamento' => 'Reglamento',
+                        default => $state,
+                    })
                     ->color(fn (string $state): string => match ($state) {
                         'procedimiento' => 'primary',
-                        'instructivo'   => 'info',
-                        'formato'       => 'gray',
-                        'manual'        => 'warning',
-                        'politica'      => 'danger',
-                        default         => 'gray',
+                        'instructivo' => 'info',
+                        'formato' => 'gray',
+                        'manual' => 'warning',
+                        'politica' => 'danger',
+                        default => 'gray',
                     }),
 
                 TextColumn::make('estado')
                     ->label('Estado')
                     ->badge()
+                    ->formatStateUsing(fn (string $state): string => match ($state) {
+                        'borrador' => 'Borrador',
+                        'en_revision' => 'En revisión',
+                        'aprobado' => 'Aprobado',
+                        'divulgado' => 'Divulgado',
+                        'verificado' => 'Verificado',
+                        'rechazado' => 'Rechazado',
+                        default => $state,
+                    })
                     ->color(fn (string $state): string => match ($state) {
-                        'borrador'    => 'gray',
+                        'borrador' => 'gray',
                         'en_revision' => 'warning',
-                        'aprobado'    => 'success',
-                        'divulgado'   => 'primary',
-                        'verificado'  => 'info',
-                        'rechazado'   => 'danger',
-                        default       => 'gray',
+                        'aprobado' => 'success',
+                        'divulgado' => 'primary',
+                        'verificado' => 'info',
+                        'rechazado' => 'danger',
+                        default => 'gray',
                     }),
 
                 TextColumn::make('fase_dicacocu')
@@ -76,7 +98,8 @@ class DocumentosTable
                     ->label('Ver.')
                     ->numeric()
                     ->sortable()
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->prefix('v'),
 
                 IconColumn::make('confidencial')
                     ->label('Conf.')
@@ -101,23 +124,23 @@ class DocumentosTable
                 SelectFilter::make('estado')
                     ->label('Estado')
                     ->options([
-                        'borrador'    => 'Borrador',
+                        'borrador' => 'Borrador',
                         'en_revision' => 'En revisión',
-                        'aprobado'    => 'Aprobado',
-                        'divulgado'   => 'Divulgado',
-                        'verificado'  => 'Verificado',
-                        'rechazado'   => 'Rechazado',
+                        'aprobado' => 'Aprobado',
+                        'divulgado' => 'Divulgado',
+                        'verificado' => 'Verificado',
+                        'rechazado' => 'Rechazado',
                     ]),
 
                 SelectFilter::make('tipo_documento')
                     ->label('Tipo')
                     ->options([
                         'procedimiento' => 'Procedimiento',
-                        'instructivo'   => 'Instructivo',
-                        'formato'       => 'Formato',
-                        'manual'        => 'Manual',
-                        'politica'      => 'Política',
-                        'norma'         => 'Norma',
+                        'instructivo' => 'Instructivo',
+                        'formato' => 'Formato',
+                        'manual' => 'Manual',
+                        'politica' => 'Política',
+                        'norma' => 'Norma',
                     ]),
 
                 SelectFilter::make('fase_dicacocu')
@@ -133,7 +156,9 @@ class DocumentosTable
 
                 TrashedFilter::make(),
             ])
+            ->recordUrl(fn ($record) => DocumentoResource::getUrl('view', ['record' => $record]))
             ->recordActions([
+                ViewAction::make(),
                 EditAction::make(),
             ])
             ->toolbarActions([
