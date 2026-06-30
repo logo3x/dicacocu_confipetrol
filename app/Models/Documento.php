@@ -43,15 +43,15 @@ class Documento extends Model implements HasMedia
     protected function casts(): array
     {
         return [
-            'fecha_emision'    => 'date',
-            'fecha_revision'   => 'date',
+            'fecha_emision' => 'date',
+            'fecha_revision' => 'date',
             'fecha_vencimiento' => 'date',
-            'tags'             => 'array',
-            'metadatos'        => 'array',
-            'requiere_firma'   => 'boolean',
-            'confidencial'     => 'boolean',
-            'version_actual'   => 'integer',
-            'visitas'          => 'integer',
+            'tags' => 'array',
+            'metadatos' => 'array',
+            'requiere_firma' => 'boolean',
+            'confidencial' => 'boolean',
+            'version_actual' => 'integer',
+            'visitas' => 'integer',
         ];
     }
 
@@ -86,6 +86,16 @@ class Documento extends Model implements HasMedia
     public function versiones(): HasMany
     {
         return $this->hasMany(DocumentoVersion::class);
+    }
+
+    public function lecturas(): HasMany
+    {
+        return $this->hasMany(LecturaDocumento::class);
+    }
+
+    public function lecturaDeUsuario(int $userId): ?LecturaDocumento
+    {
+        return $this->lecturas()->where('user_id', $userId)->first();
     }
 
     public function versionActual(): BelongsTo
