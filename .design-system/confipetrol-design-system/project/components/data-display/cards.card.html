@@ -1,0 +1,51 @@
+<!-- @dsCard group="Components" viewport="700x380" name="Cards, Badges & Stats" subtitle="Surfaces, status labels, KPIs, service tiles" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 24px 26px; background: var(--surface-page); }
+  .row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .stats { display: flex; gap: 36px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Card, Badge, Stat, ServiceCard } = window.ConfipetrolDesignSystem_9a2081;
+  function Demo() {
+    return (
+      <div>
+        <div className="row">
+          <Badge tone="brand">Oil &amp; Gas</Badge>
+          <Badge tone="accent">Minería</Badge>
+          <Badge tone="success">Adjudicado</Badge>
+          <Badge tone="warning">En revisión</Badge>
+          <Badge tone="danger">Crítico</Badge>
+          <Badge tone="accent" solid>Nuevo</Badge>
+        </div>
+        <div className="cols">
+          <Card accentTop elevated>
+            <div className="stats">
+              <Stat value="+82.5t" label="CO₂ reducido" sublabel="ISO 50001 · 2024" />
+              <Stat value="6" label="Países" accent="brand" />
+            </div>
+          </Card>
+          <ServiceCard icon={<i className="fa-solid fa-gears"></i>} title="Overhaul"
+            description="Reparación mayor de equipo rotativo y maquinaria crítica." />
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

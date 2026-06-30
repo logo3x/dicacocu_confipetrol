@@ -1,0 +1,18 @@
+<!-- @dsCard group="Type" viewport="700x300" name="Type Scale" subtitle="--fs-2xs → 5xl · 1.25 major-third ramp" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:20px 26px; background:var(--surface-card); }
+  .r { display:flex; align-items:baseline; gap:18px; padding:5px 0; border-bottom:1px solid var(--border-subtle); }
+  .r:last-child { border:0; }
+  .tok { font-family:var(--font-mono); font-size:11px; color:var(--text-muted); width:120px; flex-shrink:0; }
+  .sp { font-family:var(--font-display); font-weight:700; color:var(--text-strong); line-height:1.1; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+</style></head>
+<body>
+  <div id="s"></div>
+  <script>
+    const rows=[['--fs-5xl','60px'],['--fs-4xl','48px'],['--fs-3xl','36px'],['--fs-2xl','28px'],['--fs-xl','22px'],['--fs-lg','18px'],['--fs-md','16px'],['--fs-sm','14px'],['--fs-xs','13px']];
+    document.getElementById('s').innerHTML = rows.map(([t,px])=>`<div class="r"><span class="tok">${t} · ${px}</span><span class="sp" style="font-size:${px}">Confipetrol</span></div>`).join('');
+  </script>
+</body></html>

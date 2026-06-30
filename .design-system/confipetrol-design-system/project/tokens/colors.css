@@ -1,0 +1,101 @@
+/* ============================================================
+   CONFIPETROL · COLOR TOKENS
+   Brand: vivid industrial orange + deep corporate blue
+   ============================================================ */
+
+:root {
+  /* ---- Brand: Orange (energy / action / CTA / accent) ---- */
+  --cp-orange-50:  #fff5e9;
+  --cp-orange-100: #fde6c8;
+  --cp-orange-200: #fbcb8b;
+  --cp-orange-300: #f8af4f;
+  --cp-orange-400: #f69a2c;
+  --cp-orange-500: #f58a1f; /* ← brand orange (logo mark) */
+  --cp-orange-600: #db7510;
+  --cp-orange-700: #b45c0c;
+  --cp-orange-800: #8c470c;
+  --cp-orange-900: #6b370c;
+
+  /* ---- Brand: Blue (trust / corporate / structure) ---- */
+  --cp-blue-50:  #e8f1fa;
+  --cp-blue-100: #c7ddf1;
+  --cp-blue-200: #92bbe2;
+  --cp-blue-300: #5b96d0;
+  --cp-blue-400: #2d76be;
+  --cp-blue-500: #0f5fab;
+  --cp-blue-600: #0050a0; /* ← brand blue (wordmark) */
+  --cp-blue-700: #064084;
+  --cp-blue-800: #08336a;
+  --cp-blue-900: #0a2950;
+
+  /* ---- Neutrals: cool industrial steel ---- */
+  --cp-white:    #ffffff;
+  --cp-gray-50:  #f6f7f9;
+  --cp-gray-100: #edeff3;
+  --cp-gray-200: #dde2e8;
+  --cp-gray-300: #c4cad3;
+  --cp-gray-400: #9aa3b0;
+  --cp-gray-500: #6e7785;
+  --cp-gray-600: #4e5663;
+  --cp-gray-700: #363d48;
+  --cp-gray-800: #232830;
+  --cp-gray-900: #14171c;
+  --cp-black:    #0a0c0f;
+
+  /* ---- Semantic status ---- */
+  --cp-success-50:  #e7f5ed;
+  --cp-success-500: #1e9e5a;
+  --cp-success-700: #147040;
+  --cp-success:     #1e9e5a;
+  --cp-warning-50:  #fef3e0;
+  --cp-warning-500: #f5a623;
+  --cp-warning:     #f5a623;
+  --cp-danger-50:   #fce8e8;
+  --cp-danger-500:  #d64545;
+  --cp-danger:      #d64545;
+  --cp-info-50:     #e8f1fa;
+  --cp-info-500:    #0f5fab;
+  --cp-info:        #0f5fab;
+
+  /* ============================================================
+     SEMANTIC ALIASES — reference these in components, not raw scale
+     ============================================================ */
+
+  /* Brand */
+  --color-primary:        var(--cp-blue-600);
+  --color-primary-hover:  var(--cp-blue-700);
+  --color-primary-active: var(--cp-blue-800);
+  --color-accent:         var(--cp-orange-500);
+  --color-accent-hover:   var(--cp-orange-600);
+  --color-accent-active:  var(--cp-orange-700);
+
+  /* Text */
+  --text-strong:    var(--cp-gray-900);
+  --text-body:      var(--cp-gray-700);
+  --text-muted:     var(--cp-gray-500);
+  --text-subtle:    var(--cp-gray-400);
+  --text-on-brand:  var(--cp-white);
+  --text-link:      var(--cp-blue-600);
+  --text-link-hover:var(--cp-blue-700);
+
+  /* Surfaces */
+  --surface-page:    var(--cp-gray-50);
+  --surface-card:    var(--cp-white);
+  --surface-sunken:  var(--cp-gray-100);
+  --surface-inverse: var(--cp-blue-900);
+  --surface-accent-soft: var(--cp-orange-50);
+  --surface-brand-soft:  var(--cp-blue-50);
+
+  /* Borders */
+  --border-subtle:  var(--cp-gray-200);
+  --border-default: var(--cp-gray-300);
+  --border-strong:  var(--cp-gray-400);
+  --border-brand:   var(--cp-blue-600);
+  --border-focus:   var(--cp-blue-400);
+
+  /* Feedback */
+  --color-success: var(--cp-success);
+  --color-warning: var(--cp-warning);
+  --color-danger:  var(--cp-danger);
+  --color-info:    var(--cp-info);
+}

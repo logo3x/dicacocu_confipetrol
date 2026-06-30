@@ -1,0 +1,200 @@
+/* ============================================================
+   CONFIPETROL · DESIGN SYSTEM TOKENS
+   Brand orange #F58A1F  ·  Brand blue #0050A0
+   ============================================================ */
+
+:root {
+  /* ---- Brand: Orange ---- */
+  --cp-orange-50:  #fff5e9;
+  --cp-orange-100: #fde6c8;
+  --cp-orange-200: #fbcb8b;
+  --cp-orange-300: #f8af4f;
+  --cp-orange-400: #f69a2c;
+  --cp-orange-500: #f58a1f;
+  --cp-orange-600: #db7510;
+  --cp-orange-700: #b45c0c;
+  --cp-orange-800: #8c470c;
+  --cp-orange-900: #6b370c;
+
+  /* ---- Brand: Blue ---- */
+  --cp-blue-50:  #e8f1fa;
+  --cp-blue-100: #c7ddf1;
+  --cp-blue-200: #92bbe2;
+  --cp-blue-300: #5b96d0;
+  --cp-blue-400: #2d76be;
+  --cp-blue-500: #0f5fab;
+  --cp-blue-600: #0050a0;
+  --cp-blue-700: #064084;
+  --cp-blue-800: #08336a;
+  --cp-blue-900: #0a2950;
+
+  /* ---- Neutrals ---- */
+  --cp-white:    #ffffff;
+  --cp-gray-50:  #f6f7f9;
+  --cp-gray-100: #edeff3;
+  --cp-gray-200: #dde2e8;
+  --cp-gray-300: #c4cad3;
+  --cp-gray-400: #9aa3b0;
+  --cp-gray-500: #6e7785;
+  --cp-gray-600: #4e5663;
+  --cp-gray-700: #363d48;
+  --cp-gray-800: #232830;
+  --cp-gray-900: #14171c;
+
+  /* ---- Status ---- */
+  --cp-success: #1e9e5a;
+  --cp-warning: #f5a623;
+  --cp-danger:  #d64545;
+  --cp-info:    #0f5fab;
+
+  /* ---- Semantic aliases ---- */
+  --color-primary:        var(--cp-blue-600);
+  --color-primary-hover:  var(--cp-blue-700);
+  --color-primary-active: var(--cp-blue-800);
+  --color-accent:         var(--cp-orange-500);
+  --color-accent-hover:   var(--cp-orange-600);
+  --color-accent-active:  var(--cp-orange-700);
+
+  --text-strong:     var(--cp-gray-900);
+  --text-body:       var(--cp-gray-700);
+  --text-muted:      var(--cp-gray-500);
+  --text-subtle:     var(--cp-gray-400);
+  --text-on-brand:   var(--cp-white);
+  --text-link:       var(--cp-blue-600);
+  --text-link-hover: var(--cp-blue-700);
+
+  --surface-page:       var(--cp-gray-50);
+  --surface-card:       var(--cp-white);
+  --surface-sunken:     var(--cp-gray-100);
+  --surface-inverse:    var(--cp-blue-900);
+  --surface-accent-soft: var(--cp-orange-50);
+  --surface-brand-soft:  var(--cp-blue-50);
+
+  --border-subtle:  var(--cp-gray-200);
+  --border-default: var(--cp-gray-300);
+  --border-strong:  var(--cp-gray-400);
+  --border-brand:   var(--cp-blue-600);
+  --border-focus:   var(--cp-blue-400);
+
+  /* ---- Typography ---- */
+  --font-display: 'Montserrat', 'Segoe UI', system-ui, sans-serif;
+  --font-body:    'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+  --fw-regular:  400;
+  --fw-medium:   500;
+  --fw-semibold: 600;
+  --fw-bold:     700;
+  --fw-extra:    800;
+
+  --fs-2xs: 0.75rem;
+  --fs-xs:  0.8125rem;
+  --fs-sm:  0.875rem;
+  --fs-md:  1rem;
+  --fs-lg:  1.125rem;
+  --fs-xl:  1.375rem;
+  --fs-2xl: 1.75rem;
+  --fs-3xl: 2.25rem;
+  --fs-4xl: 3rem;
+  --fs-5xl: 3.75rem;
+  --fs-6xl: 4.5rem;
+
+  /* ---- Spacing ---- */
+  --space-1:  0.25rem;
+  --space-2:  0.5rem;
+  --space-3:  0.75rem;
+  --space-4:  1rem;
+  --space-5:  1.5rem;
+  --space-6:  2rem;
+  --space-7:  2.5rem;
+  --space-8:  3rem;
+  --space-9:  4rem;
+  --space-10: 6rem;
+  --space-11: 8rem;
+
+  --container-lg: 1120px;
+  --container-xl: 1320px;
+
+  --radius-xs:   3px;
+  --radius-sm:   5px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   18px;
+  --radius-2xl:  28px;
+  --radius-pill: 999px;
+
+  --shadow-xs:     0 1px 2px rgba(10, 23, 41, 0.06);
+  --shadow-sm:     0 1px 3px rgba(10, 23, 41, 0.08), 0 1px 2px rgba(10, 23, 41, 0.04);
+  --shadow-md:     0 4px 12px rgba(10, 23, 41, 0.08), 0 2px 4px rgba(10, 23, 41, 0.05);
+  --shadow-lg:     0 12px 28px rgba(10, 23, 41, 0.12), 0 4px 8px rgba(10, 23, 41, 0.06);
+  --shadow-xl:     0 24px 56px rgba(8, 41, 80, 0.18);
+  --shadow-brand:  0 10px 24px rgba(0, 80, 160, 0.22);
+  --shadow-accent: 0 10px 24px rgba(245, 138, 31, 0.28);
+  --ring-focus:    0 0 0 3px rgba(45, 118, 190, 0.35);
+
+  --ease-out:  cubic-bezier(0.22, 1, 0.36, 1);
+  --dur-fast:  140ms;
+  --dur-base:  220ms;
+  --dur-slow:  360ms;
+}
+
+/* ---- Base resets ---- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-md);
+  line-height: 1.65;
+  color: var(--text-body);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  line-height: 1.2;
+  color: var(--text-strong);
+  margin: 0;
+}
+
+a {
+  color: var(--text-link);
+  text-decoration: none;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+a:hover { color: var(--text-link-hover); }
+
+*:focus-visible { outline: none; box-shadow: var(--ring-focus); }
+
+/* ---- Utility classes ---- */
+.cp-container {
+  max-width: var(--container-lg);
+  margin-inline: auto;
+  padding-inline: var(--space-7);
+}
+
+.cp-eyebrow {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.cp-accent-rule {
+  width: 56px;
+  height: 4px;
+  background: var(--color-accent);
+  border-radius: var(--radius-pill);
+  margin-top: var(--space-3);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

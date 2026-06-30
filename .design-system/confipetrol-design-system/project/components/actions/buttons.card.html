@@ -1,0 +1,54 @@
+<!-- @dsCard group="Components" viewport="700x320" name="Buttons & Icon Buttons" subtitle="Brand actions — blue primary, orange accent CTA" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 22px 26px; background: var(--surface-card); }
+  .row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 18px; }
+  .lbl { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--text-muted); width: 100%; margin-bottom: -4px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Button, IconButton } = window.ConfipetrolDesignSystem_9a2081;
+  function Demo() {
+    return (
+      <div>
+        <div className="row">
+          <span className="lbl">Variants</span>
+          <Button variant="accent" iconLeft={<i className="fa-solid fa-phone"></i>}>Contáctanos</Button>
+          <Button variant="primary">Ver servicios</Button>
+          <Button variant="secondary" iconLeft={<i className="fa-solid fa-download"></i>}>Reporte</Button>
+          <Button variant="ghost">Cancelar</Button>
+          <Button variant="danger">Eliminar</Button>
+        </div>
+        <div className="row">
+          <span className="lbl">Sizes &amp; states</span>
+          <Button variant="primary" size="sm">Small</Button>
+          <Button variant="primary" size="md">Medium</Button>
+          <Button variant="primary" size="lg">Large</Button>
+          <Button variant="primary" disabled>Disabled</Button>
+        </div>
+        <div className="row">
+          <span className="lbl">Icon buttons</span>
+          <IconButton label="Buscar" variant="primary"><i className="fa-solid fa-magnifying-glass"></i></IconButton>
+          <IconButton label="Menú" variant="accent"><i className="fa-solid fa-bars"></i></IconButton>
+          <IconButton label="Compartir" variant="secondary"><i className="fa-solid fa-share-nodes"></i></IconButton>
+          <IconButton label="Más" variant="ghost"><i className="fa-solid fa-ellipsis"></i></IconButton>
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

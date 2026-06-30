@@ -1,0 +1,31 @@
+<!-- @dsCard group="Colors" viewport="700x180" name="Brand Colors" subtitle="Orange (action) + Blue (corporate) — the two-color core" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:22px 24px; background:var(--surface-card); font-family:var(--font-body); }
+  .row { display:flex; gap:18px; }
+  .sw { flex:1; border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border-subtle); }
+  .chip { height:88px; display:flex; align-items:flex-end; padding:12px; }
+  .meta { padding:10px 12px; }
+  .name { font-family:var(--font-display); font-weight:700; font-size:15px; color:var(--text-strong); }
+  .hex { font-family:var(--font-mono); font-size:12px; color:var(--text-muted); text-transform:uppercase; }
+  .role { font-size:12px; color:var(--text-muted); }
+  .on { color:#fff; font-family:var(--font-mono); font-size:11px; opacity:.85; }
+</style></head>
+<body>
+  <div class="row">
+    <div class="sw">
+      <div class="chip" style="background:var(--cp-orange-500)"><span class="on">CTA · acento · energía</span></div>
+      <div class="meta"><div class="name">Confipetrol Orange</div><div class="hex">#F58A1F · --cp-orange-500</div></div>
+    </div>
+    <div class="sw">
+      <div class="chip" style="background:var(--cp-blue-600)"><span class="on">corporativo · confianza</span></div>
+      <div class="meta"><div class="name">Confipetrol Blue</div><div class="hex">#0050A0 · --cp-blue-600</div></div>
+    </div>
+    <div class="sw">
+      <div class="chip" style="background:var(--cp-gray-900)"><span class="on">texto · superficie oscura</span></div>
+      <div class="meta"><div class="name">Ink</div><div class="hex">#14171C · --cp-gray-900</div></div>
+    </div>
+  </div>
+</body></html>

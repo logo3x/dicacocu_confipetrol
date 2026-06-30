@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Neutral Steel" subtitle="--cp-gray-50 → 900 · text, borders, backgrounds" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:22px 24px; background:var(--surface-card); font-family:var(--font-mono); }
+  .scale { display:flex; gap:6px; }
+  .step { flex:1; }
+  .box { height:64px; border-radius:var(--radius-sm); border:1px solid rgba(0,0,0,.08); }
+  .n { font-size:11px; color:var(--text-strong); margin-top:8px; text-align:center; }
+  .h { font-size:9.5px; color:var(--text-muted); text-align:center; }
+</style></head>
+<body>
+  <div class="scale" id="s"></div>
+  <script>
+    const steps=[['50','#f6f7f9'],['100','#edeff3'],['200','#dde2e8'],['300','#c4cad3'],['400','#9aa3b0'],['500','#6e7785'],['600','#4e5663'],['700','#363d48'],['800','#232830'],['900','#14171c']];
+    document.getElementById('s').innerHTML = steps.map(([n,h])=>`<div class="step"><div class="box" style="background:${h}"></div><div class="n">${n}</div><div class="h">${h.toUpperCase()}</div></div>`).join('');
+  </script>
+</body></html>

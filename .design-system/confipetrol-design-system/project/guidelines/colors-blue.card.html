@@ -1,0 +1,19 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Blue Scale" subtitle="--cp-blue-50 → 900 · headings, links, structure, dark surfaces" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:22px 24px; background:var(--surface-card); font-family:var(--font-mono); }
+  .scale { display:flex; gap:6px; }
+  .step { flex:1; }
+  .box { height:64px; border-radius:var(--radius-sm); border:1px solid rgba(0,0,0,.06); }
+  .n { font-size:11px; color:var(--text-strong); margin-top:8px; text-align:center; }
+  .h { font-size:9.5px; color:var(--text-muted); text-align:center; }
+</style></head>
+<body>
+  <div class="scale" id="s"></div>
+  <script>
+    const steps=[['50','#e8f1fa'],['100','#c7ddf1'],['200','#92bbe2'],['300','#5b96d0'],['400','#2d76be'],['500','#0f5fab'],['600','#0050a0'],['700','#064084'],['800','#08336a'],['900','#0a2950']];
+    document.getElementById('s').innerHTML = steps.map(([n,h])=>`<div class="step"><div class="box" style="background:${h}"></div><div class="n">${n}</div><div class="h">${h.toUpperCase()}</div></div>`).join('');
+  </script>
+</body></html>

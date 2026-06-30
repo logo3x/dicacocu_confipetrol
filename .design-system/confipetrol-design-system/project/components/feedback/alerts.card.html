@@ -1,0 +1,32 @@
+<!-- @dsCard group="Components" viewport="700x250" name="Alerts" subtitle="Inline message banners — info, success, warning, danger" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style> body { margin: 0; padding: 24px 26px; background: var(--surface-card); } .stack { display: flex; flex-direction: column; gap: 12px; } </style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Alert } = window.ConfipetrolDesignSystem_9a2081;
+  function Demo() {
+    return (
+      <div className="stack">
+        <Alert tone="success" title="Servicio adjudicado">Codelco Salvador — consolidamos presencia en minería.</Alert>
+        <Alert tone="info">Nuevo Reporte de Sostenibilidad disponible para descarga.</Alert>
+        <Alert tone="warning" onClose={() => {}}>Documentación del proveedor pendiente de cargar.</Alert>
+        <Alert tone="danger" title="Parada no programada">Equipo crítico fuera de servicio en planta.</Alert>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>

@@ -1,0 +1,35 @@
+@import 'tailwindcss';
+@import './confipetrol-tokens.css';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans:    'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
+    --font-display: 'Montserrat', ui-sans-serif, system-ui, sans-serif;
+    --font-mono:    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+
+    /* Map CP brand colors into Tailwind theme */
+    --color-primary:   #0050a0;
+    --color-accent:    #f58a1f;
+
+    --color-cp-blue-50:  #e8f1fa;
+    --color-cp-blue-100: #c7ddf1;
+    --color-cp-blue-400: #2d76be;
+    --color-cp-blue-500: #0f5fab;
+    --color-cp-blue-600: #0050a0;
+    --color-cp-blue-700: #064084;
+    --color-cp-blue-800: #08336a;
+    --color-cp-blue-900: #0a2950;
+
+    --color-cp-orange-400: #f69a2c;
+    --color-cp-orange-500: #f58a1f;
+    --color-cp-orange-600: #db7510;
+    --color-cp-orange-700: #b45c0c;
+
+    --color-cp-gray-50:  #f6f7f9;
+    --color-cp-gray-100: #edeff3;
+    --color-cp-gray-200: #dde2e8;
+    --color-cp-gray-700: #363d48;
+    --color-cp-gray-900: #14171c;
+}

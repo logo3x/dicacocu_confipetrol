@@ -1,0 +1,9 @@
+/* Confipetrol webfonts
+   NOTE: The live confipetrol.com site loads Google Fonts via Elementor but does
+   not expose exact families. These are the closest geometric/corporate matches:
+   Montserrat (geometric display — echoes the bold CONFIPETROL wordmark),
+   Source Sans 3 (humanist body, strong Spanish diacritic support),
+   IBM Plex Mono (technical / spec + metric data).
+   Flagged as a substitution — swap in licensed brand fonts if provided. */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap');

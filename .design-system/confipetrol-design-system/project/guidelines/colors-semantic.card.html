@@ -1,0 +1,21 @@
+<!-- @dsCard group="Colors" viewport="700x150" name="Semantic / Status" subtitle="success · warning · danger · info — soft + solid" -->
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  body { margin:0; padding:22px 24px; background:var(--surface-card); font-family:var(--font-body); }
+  .row { display:flex; gap:14px; }
+  .c { flex:1; border-radius:var(--radius-md); overflow:hidden; border:1px solid var(--border-subtle); }
+  .bar { height:46px; }
+  .lab { padding:8px 10px; }
+  .t { font-family:var(--font-display); font-weight:700; font-size:13px; color:var(--text-strong); }
+  .hex { font-family:var(--font-mono); font-size:10.5px; color:var(--text-muted); }
+</style></head>
+<body>
+  <div class="row">
+    <div class="c"><div class="bar" style="background:var(--color-success)"></div><div class="lab"><div class="t">Success</div><div class="hex">#1E9E5A</div></div></div>
+    <div class="c"><div class="bar" style="background:var(--color-warning)"></div><div class="lab"><div class="t">Warning</div><div class="hex">#F5A623</div></div></div>
+    <div class="c"><div class="bar" style="background:var(--color-danger)"></div><div class="lab"><div class="t">Danger</div><div class="hex">#D64545</div></div></div>
+    <div class="c"><div class="bar" style="background:var(--color-info)"></div><div class="lab"><div class="t">Info</div><div class="hex">#0F5FAB</div></div></div>
+  </div>
+</body></html>

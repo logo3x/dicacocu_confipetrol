@@ -1,0 +1,45 @@
+<!-- @dsCard group="Components" viewport="700x340" name="Form Controls" subtitle="Input, Select, Checkbox, Switch" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="../../styles.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+<script src="../../_ds_bundle.js"></script>
+<style>
+  body { margin: 0; padding: 24px 26px; background: var(--surface-card); }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 22px; align-items: start; }
+  .stack { display: flex; flex-direction: column; gap: 16px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+  const { Input, Select, Checkbox, Switch } = window.ConfipetrolDesignSystem_9a2081;
+  function Demo() {
+    const [v, setV] = React.useState('');
+    const [pais, setPais] = React.useState('Colombia');
+    const [ok, setOk] = React.useState(true);
+    const [news, setNews] = React.useState(true);
+    return (
+      <div className="grid">
+        <Input label="Correo corporativo" placeholder="nombre@empresa.com" value={v}
+               onChange={e => setV(e.target.value)} iconLeft={<i className="fa-solid fa-envelope"></i>} />
+        <Select label="País de operación" value={pais} onChange={e => setPais(e.target.value)}
+                options={['Colombia','Perú','Chile','Bolivia','Ecuador','Venezuela']} />
+        <Input label="Teléfono" placeholder="+57" error="Ingresa un número válido" />
+        <div className="stack" style={{ paddingTop: 4 }}>
+          <Checkbox label="Acepto la política de datos" checked={ok} onChange={e => setOk(e.target.checked)} />
+          <Switch label="Recibir Confinoticias" checked={news} onChange={setNews} />
+        </div>
+      </div>
+    );
+  }
+  ReactDOM.createRoot(document.getElementById('root')).render(<Demo />);
+</script>
+</body>
+</html>
