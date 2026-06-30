@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Documento;
+use App\Services\NotificacionDocumentoService;
 
 class DocumentoObserver
 {
@@ -30,14 +31,18 @@ class DocumentoObserver
     public function updated(Documento $documento): void
     {
         if ($documento->wasChanged('estado')) {
+            $estadoAnterior = $documento->getOriginal('estado');
+
             activity()
                 ->performedOn($documento)
                 ->causedBy(auth()->user())
                 ->withProperties([
-                    'estado_anterior' => $documento->getOriginal('estado'),
+                    'estado_anterior' => $estadoAnterior,
                     'estado_nuevo' => $documento->estado,
                 ])
-                ->log("Estado cambiado de [{$documento->getOriginal('estado')}] a [{$documento->estado}]");
+                ->log("Estado cambiado de [{$estadoAnterior}] a [{$documento->estado}]");
+
+            NotificacionDocumentoService::notificarCambioEstado($documento, $estadoAnterior);
         }
     }
 
