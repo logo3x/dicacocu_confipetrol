@@ -374,6 +374,128 @@
     flex-shrink: 0;
 }
 
+/* ANIMACIONES */
+@keyframes heroSlideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+@keyframes cardFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+}
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.22; transform: scale(1); }
+    50%      { opacity: 0.38; transform: scale(1.08); }
+}
+@keyframes countUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Hero entrada */
+.cp-hero__content .cp-eyebrow { animation: heroSlideUp 0.6s ease both; }
+.cp-hero__title               { animation: heroSlideUp 0.6s 0.1s ease both; }
+.cp-hero__desc                { animation: heroSlideUp 0.6s 0.2s ease both; }
+.cp-hero__cta                 { animation: heroSlideUp 0.6s 0.32s ease both; }
+.cp-hero__visual              { animation: heroFadeIn 0.8s 0.4s ease both; }
+
+/* Glow animado */
+.cp-hero__glow { animation: glowPulse 6s ease-in-out infinite; }
+.cp-cta-box__glow { animation: glowPulse 5s 1s ease-in-out infinite; }
+
+/* Stat cards del hero con flotación */
+.cp-stat-card:nth-child(1) { animation: cardFloat 4s 0s ease-in-out infinite; }
+.cp-stat-card:nth-child(2) { animation: cardFloat 4s 1.3s ease-in-out infinite; }
+.cp-stat-card:nth-child(3) { animation: cardFloat 4s 2.6s ease-in-out infinite; }
+
+/* Scroll reveal — oculto por defecto */
+.cp-reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.cp-reveal.cp-revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+.cp-reveal:nth-child(2) { transition-delay: 0.08s; }
+.cp-reveal:nth-child(3) { transition-delay: 0.16s; }
+.cp-reveal:nth-child(4) { transition-delay: 0.24s; }
+.cp-reveal:nth-child(5) { transition-delay: 0.32s; }
+.cp-reveal:nth-child(6) { transition-delay: 0.40s; }
+.cp-reveal:nth-child(7) { transition-delay: 0.48s; }
+.cp-reveal:nth-child(8) { transition-delay: 0.56s; }
+
+/* Stats band counter */
+.cp-stat__value {
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+.cp-stat:hover .cp-stat__value { transform: scale(1.12); }
+
+/* Botones con micro-interacción mejorada */
+.cp-btn {
+    position: relative;
+    overflow: hidden;
+}
+.cp-btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(255,255,255,0);
+    transition: background 0.2s ease;
+}
+.cp-btn:hover::after { background: rgba(255,255,255,0.08); }
+.cp-btn:active { transform: scale(0.97) translateY(1px); }
+
+/* Phase cards stagger */
+.cp-phase-card {
+    position: relative;
+    overflow: hidden;
+}
+.cp-phase-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(0,80,160,0.03), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+.cp-phase-card:hover::after { opacity: 1; }
+.cp-phase-card__icon {
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+.cp-phase-card:hover .cp-phase-card__icon {
+    transform: scale(1.12) rotate(-3deg);
+    background: var(--cp-blue-100);
+}
+
+/* Feature cards */
+.cp-feature-card__icon {
+    transition: transform 0.25s ease, background 0.25s ease;
+}
+.cp-feature-card:hover .cp-feature-card__icon {
+    transform: scale(1.1);
+    background: var(--cp-blue-100);
+}
+.cp-feature-card {
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+}
+.cp-feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+}
+
+/* Nav scroll effect (manejado por JS) */
+.cp-nav.scrolled {
+    box-shadow: var(--shadow-md);
+    background: rgba(255,255,255,0.98);
+}
+
 /* RESPONSIVE */
 @media (max-width: 1024px) {
     .cp-phases { grid-template-columns: repeat(2, 1fr); }
@@ -390,4 +512,74 @@
     .cp-features { grid-template-columns: 1fr; }
     .cp-stats-band__inner { grid-template-columns: 1fr 1fr; }
 }
+
+@media (prefers-reduced-motion: reduce) {
+    .cp-stat-card, .cp-hero__glow, .cp-cta-box__glow {
+        animation: none !important;
+    }
+    .cp-reveal {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+    }
+}
 </style>
+
+@push('scripts')
+<script>
+// Scroll reveal con IntersectionObserver
+(function () {
+    if (!('IntersectionObserver' in window)) return;
+
+    // Añadir clase cp-reveal a elementos candidatos
+    document.querySelectorAll('.cp-phase-card, .cp-feature-card').forEach(el => {
+        el.classList.add('cp-reveal');
+    });
+
+    const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('cp-revealed');
+                io.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.cp-reveal').forEach(el => io.observe(el));
+
+    // Nav shadow on scroll
+    const nav = document.querySelector('.cp-nav');
+    if (nav) {
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 20);
+        }, { passive: true });
+    }
+
+    // Stats counter animation
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const raw = el.textContent.trim();
+            const num = parseInt(raw.replace(/\D/g, ''), 10);
+            if (!isNaN(num) && num > 0) {
+                const prefix = raw.startsWith('+') ? '+' : '';
+                const suffix = raw.endsWith('%') ? '%' : '';
+                const duration = 1200;
+                const start = performance.now();
+                const tick = (now) => {
+                    const progress = Math.min((now - start) / duration, 1);
+                    const eased = 1 - Math.pow(1 - progress, 3);
+                    el.textContent = prefix + Math.round(eased * num) + suffix;
+                    if (progress < 1) requestAnimationFrame(tick);
+                };
+                requestAnimationFrame(tick);
+            }
+            statsObserver.unobserve(el);
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.cp-stat__value').forEach(el => statsObserver.observe(el));
+})();
+</script>
+@endpush
