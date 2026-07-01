@@ -15,32 +15,80 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(RolesPermissionsSeeder::class);
 
-        $admin = User::firstOrCreate(
-            ['email' => 'admin@confipetrol.com'],
+        $usuarios = [
             [
-                'name'              => 'Administrador SGD',
-                'cargo'             => 'Administrador del Sistema',
-                'area'              => 'TI',
-                'sede'              => 'Bogotá',
-                'password'          => Hash::make('Admin@2026!'),
-                'email_verified_at' => now(),
-                'is_active'         => true,
-            ]
-        );
-        $admin->assignRole('super_admin');
+                'email' => 'superadmin@confipetrol.com',
+                'name' => 'Carlos Mendoza',
+                'cargo' => 'Administrador del Sistema',
+                'area' => 'Tecnología',
+                'sede' => 'Bogotá',
+                'password' => 'SuperAdmin@2026!',
+                'rol' => 'super_admin',
+            ],
+            [
+                'email' => 'admin@confipetrol.com',
+                'name' => 'Laura Rodríguez',
+                'cargo' => 'Coordinadora de Calidad',
+                'area' => 'Calidad y HSE',
+                'sede' => 'Bogotá',
+                'password' => 'Admin@2026!',
+                'rol' => 'admin',
+            ],
+            [
+                'email' => 'gestor@confipetrol.com',
+                'name' => 'Andrés Vargas',
+                'cargo' => 'Gestor Documental',
+                'area' => 'Calidad y HSE',
+                'sede' => 'Medellín',
+                'password' => 'Gestor@2026!',
+                'rol' => 'gestor_documental',
+            ],
+            [
+                'email' => 'revisor@confipetrol.com',
+                'name' => 'Patricia Morales',
+                'cargo' => 'Ingeniera de Procesos',
+                'area' => 'Ingeniería',
+                'sede' => 'Cartagena',
+                'password' => 'Revisor@2026!',
+                'rol' => 'revisor',
+            ],
+            [
+                'email' => 'colaborador@confipetrol.com',
+                'name' => 'Diego Pérez',
+                'cargo' => 'Técnico Operativo',
+                'area' => 'Operaciones',
+                'sede' => 'Barrancabermeja',
+                'password' => 'Colaborador@2026!',
+                'rol' => 'colaborador',
+            ],
+            [
+                'email' => 'consultor@confipetrol.com',
+                'name' => 'María Fernández',
+                'cargo' => 'Consultora Externa',
+                'area' => 'Consultoría',
+                'sede' => 'Bogotá',
+                'password' => 'Consultor@2026!',
+                'rol' => 'consultor',
+            ],
+        ];
 
-        $gestor = User::firstOrCreate(
-            ['email' => 'gestor@confipetrol.com'],
-            [
-                'name'              => 'Gestor Documental',
-                'cargo'             => 'Gestor de Documentos',
-                'area'              => 'Calidad',
-                'sede'              => 'Bogotá',
-                'password'          => Hash::make('Gestor@2026!'),
-                'email_verified_at' => now(),
-                'is_active'         => true,
-            ]
-        );
-        $gestor->assignRole('gestor_documental');
+        foreach ($usuarios as $datos) {
+            $user = User::firstOrCreate(
+                ['email' => $datos['email']],
+                [
+                    'name' => $datos['name'],
+                    'cargo' => $datos['cargo'],
+                    'area' => $datos['area'],
+                    'sede' => $datos['sede'],
+                    'password' => Hash::make($datos['password']),
+                    'email_verified_at' => now(),
+                    'is_active' => true,
+                ]
+            );
+
+            if (! $user->hasRole($datos['rol'])) {
+                $user->assignRole($datos['rol']);
+            }
+        }
     }
 }
