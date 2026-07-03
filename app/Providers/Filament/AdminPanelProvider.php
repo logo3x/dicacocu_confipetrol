@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Pages\Auth\Login;
 use App\Filament\Pages\DashboardDicacocu;
 use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
@@ -26,7 +27,8 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(Login::class)
+            ->registration(null)
             ->brandName('SGD DICACOCU')
             ->brandLogo(asset('images/confipetrol-logo-white.png'))
             ->brandLogoHeight('2.5rem')
