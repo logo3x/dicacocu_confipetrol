@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Documentos\RelationManagers;
 
+use App\Models\DocumentoVersion;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\CreateAction;
 use Filament\Actions\DeleteAction;
@@ -30,7 +31,20 @@ class VersionesRelationManager extends RelationManager
                     ->label('Número de versión')
                     ->numeric()
                     ->required()
-                    ->minValue(1),
+                    ->minValue(1)
+                    ->integer()
+                    ->helperText(fn () => 'La versión siguiente sugerida se calcula automáticamente.')
+                    ->rules([
+                        fn () => function (string $attribute, $value, $fail) {
+                            $documentoId = $this->getOwnerRecord()->id;
+                            $existe = DocumentoVersion::where('documento_id', $documentoId)
+                                ->where('version', (int) $value)
+                                ->exists();
+                            if ($existe) {
+                                $fail("La versión {$value} ya existe para este documento.");
+                            }
+                        },
+                    ]),
 
                 Select::make('estado')
                     ->label('Estado')
@@ -101,6 +115,11 @@ class VersionesRelationManager extends RelationManager
                         $data['created_by'] = auth()->id();
 
                         return $data;
+                    })
+                    ->fillForm(function (): array {
+                        $siguienteVersion = ($this->getOwnerRecord()->versiones()->max('version') ?? 0) + 1;
+
+                        return ['version' => $siguienteVersion];
                     }),
             ])
             ->recordActions([
