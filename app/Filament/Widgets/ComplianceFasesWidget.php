@@ -28,6 +28,7 @@ class ComplianceFasesWidget extends TableWidget
                     ->whereNotNull('fase_dicacocu')
                     ->selectRaw('
                         fase_dicacocu,
+                        MIN(id) as id,
                         COUNT(*) as total,
                         SUM(CASE WHEN estado IN ("aprobado","divulgado","verificado") THEN 1 ELSE 0 END) as vigentes,
                         SUM(CASE WHEN estado = "en_revision" THEN 1 ELSE 0 END) as en_revision,
