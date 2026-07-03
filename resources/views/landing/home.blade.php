@@ -732,44 +732,20 @@
 
 /* ================================================================
    SCROLL REVEAL
+   Nota: las clases parten visibles; el JS las oculta ANTES de
+   observar, evitando contenido invisible si el Observer no dispara.
 ================================================================ */
-.cp-reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
-    transition-delay: var(--reveal-delay, 0s);
-}
-.cp-reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-.cp-reveal-header {
-    opacity: 0;
-    transform: translateY(16px);
+.cp-reveal,
+.cp-reveal-header,
+.cp-reveal-block,
+.cp-reveal-stat {
+    /* visible por defecto — JS las oculta una vez listo */
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
-.cp-reveal-header.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-.cp-reveal-block {
-    opacity: 0;
-    transform: translateY(20px) scale(0.99);
-    transition: opacity 0.7s ease, transform 0.7s var(--ease-out);
-}
-.cp-reveal-block.is-visible {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-}
-.cp-reveal-stat {
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.5s ease, transform 0.5s ease;
-}
-.cp-reveal-stat.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-}
+.cp-reveal.js-hidden         { opacity: 0; transform: translateY(22px); }
+.cp-reveal-header.js-hidden  { opacity: 0; transform: translateY(14px); }
+.cp-reveal-block.js-hidden   { opacity: 0; transform: translateY(18px) scale(0.99); }
+.cp-reveal-stat.js-hidden    { opacity: 0; transform: translateY(18px); }
 
 /* Nav scrolled */
 .cp-nav.scrolled {
@@ -834,7 +810,11 @@
         opacity: 1 !important;
         transform: none !important;
     }
-    .cp-reveal, .cp-reveal-header, .cp-reveal-block, .cp-reveal-stat {
+    /* Con reduced motion nunca ocultar contenido */
+    .cp-reveal.js-hidden,
+    .cp-reveal-header.js-hidden,
+    .cp-reveal-block.js-hidden,
+    .cp-reveal-stat.js-hidden {
         opacity: 1 !important;
         transform: none !important;
         transition: none !important;
@@ -845,46 +825,72 @@
 @push('scripts')
 <script>
 (function () {
-    // ── IntersectionObserver para scroll reveals ──────────────────
+    const REVEAL_SELECTORS = '.cp-reveal, .cp-reveal-header, .cp-reveal-block';
+    const STAT_SELECTOR    = '.cp-reveal-stat';
+
+    // ── Sin IntersectionObserver → todo visible de inmediato ──────
     if (!('IntersectionObserver' in window)) {
-        // Fallback: mostrar todo inmediatamente
-        document.querySelectorAll('.cp-reveal, .cp-reveal-header, .cp-reveal-block, .cp-reveal-stat')
-            .forEach(el => el.classList.add('is-visible'));
+        document.querySelectorAll(REVEAL_SELECTORS + ', ' + STAT_SELECTOR)
+            .forEach(el => el.classList.remove('js-hidden'));
         return;
     }
 
-    const revealOpts = { threshold: 0.1, rootMargin: '0px 0px -48px 0px' };
+    // ── Paso 1: ocultar elementos ANTES de observar ───────────────
+    // (el CSS solo define la transición; las clases parten visibles
+    //  para no romper si JS tarda o falla)
+    const revealEls = document.querySelectorAll(REVEAL_SELECTORS);
+    const statEls   = document.querySelectorAll(STAT_SELECTOR);
+
+    revealEls.forEach(el => el.classList.add('js-hidden'));
+    statEls.forEach(el => el.classList.add('js-hidden'));
+
+    // ── Paso 2: Observer para revelar ─────────────────────────────
+    const makeReveal = (el, delay = 0) => {
+        setTimeout(() => el.classList.remove('js-hidden'), delay);
+    };
+
     const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                io.unobserve(entry.target);
-            }
+            if (!entry.isIntersecting) return;
+            makeReveal(entry.target);
+            io.unobserve(entry.target);
         });
-    }, revealOpts);
+    }, { threshold: 0.08, rootMargin: '0px 0px -32px 0px' });
 
-    document.querySelectorAll('.cp-reveal, .cp-reveal-header, .cp-reveal-block').forEach(el => io.observe(el));
+    revealEls.forEach(el => io.observe(el));
 
-    // Stagger de reveal-stat
-    const statOpts = { threshold: 0.2, rootMargin: '0px 0px -20px 0px' };
+    // Stagger de stat cards ─────────────────────────────────────────
     const statIo = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            const stats = document.querySelectorAll('.cp-reveal-stat');
-            stats.forEach((el, i) => {
-                setTimeout(() => el.classList.add('is-visible'), i * 110);
-            });
+            statEls.forEach((el, i) => makeReveal(el, i * 100));
             statIo.disconnect();
         });
-    }, statOpts);
-    const firstStat = document.querySelector('.cp-reveal-stat');
-    if (firstStat) statIo.observe(firstStat);
+    }, { threshold: 0.1, rootMargin: '0px 0px -16px 0px' });
+
+    if (statEls.length) statIo.observe(statEls[0]);
+
+    // Stagger de phase & feature cards (delay por posición en grid) ─
+    document.querySelectorAll('.cp-phase-card, .cp-feature-card').forEach((el, i) => {
+        el._revealDelay = (i % 4) * 70; // máximo 280ms stagger
+    });
+    const staggerIo = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            makeReveal(entry.target, entry.target._revealDelay || 0);
+            staggerIo.unobserve(entry.target);
+        });
+    }, { threshold: 0.08, rootMargin: '0px 0px -24px 0px' });
+
+    document.querySelectorAll('.cp-phase-card.js-hidden, .cp-feature-card.js-hidden')
+        .forEach(el => staggerIo.observe(el));
 
     // ── Nav shadow on scroll ──────────────────────────────────────
     const nav = document.querySelector('.cp-nav');
     if (nav) {
-        const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 24);
-        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('scroll', () => {
+            nav.classList.toggle('scrolled', window.scrollY > 24);
+        }, { passive: true });
     }
 
     // ── Smooth scroll para links de anclaje ───────────────────────
@@ -906,23 +912,21 @@
             const raw = el.dataset.count || el.textContent.trim();
             const num = parseInt(raw.replace(/\D/g, ''), 10);
             if (isNaN(num) || num === 0) return;
-
             const prefix = raw.startsWith('+') ? '+' : '';
             const suffix = raw.endsWith('%') ? '%' : '';
-            const duration = 1400;
+            const duration = 1300;
             const start = performance.now();
-
             const tick = (now) => {
                 const t = Math.min((now - start) / duration, 1);
-                const eased = 1 - Math.pow(1 - t, 4); // easeOutQuart
+                const eased = 1 - Math.pow(1 - t, 4);
                 el.textContent = prefix + Math.round(eased * num).toLocaleString('es-CO') + suffix;
                 if (t < 1) requestAnimationFrame(tick);
-                else el.textContent = raw; // restaurar valor original exacto
+                else el.textContent = raw;
             };
             requestAnimationFrame(tick);
             counterIo.unobserve(el);
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.4 });
 
     document.querySelectorAll('.cp-stat__value').forEach(el => counterIo.observe(el));
 

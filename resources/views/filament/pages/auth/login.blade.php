@@ -126,13 +126,16 @@
 
     /* ── Card del formulario ── */
     .fi-simple-main {
-        background: var(--sgd-card-bg) !important;
-        border: 1px solid var(--sgd-border) !important;
-        border-radius: 1.125rem !important;
+        background: linear-gradient(160deg,
+            #142550 0%,
+            #0F1E45 60%,
+            #0C1A3C 100%) !important;
+        border: 1px solid #253D6A !important;
+        border-radius: 1.25rem !important;
         box-shadow:
-            0 0 0 1px rgba(255,255,255,0.04) inset,
-            0 8px 48px rgba(0,0,0,0.55),
-            0 2px 0 rgba(255,255,255,0.05) inset !important;
+            0 0 0 1px rgba(255,255,255,0.06) inset,
+            0 12px 56px rgba(0,0,0,0.6),
+            0 2px 0 rgba(255,255,255,0.06) inset !important;
         animation: sgdScaleIn 0.5s 0.18s cubic-bezier(0.16,1,0.3,1) both;
         position: relative;
         z-index: 1;
@@ -147,11 +150,25 @@
         top: 0; left: 0; right: 0;
         height: 3px;
         background: linear-gradient(90deg,
-            transparent 0%,
-            var(--sgd-orange) 20%,
-            var(--sgd-gold) 60%,
-            transparent 100%);
+            transparent 5%,
+            var(--sgd-orange) 25%,
+            var(--sgd-gold) 65%,
+            transparent 95%);
         z-index: 2;
+        box-shadow: 0 0 16px rgba(232,135,26,0.4);
+    }
+
+    /* Efecto de luz superior izquierda dentro del card */
+    .fi-simple-main::after {
+        content: '';
+        display: block;
+        position: absolute;
+        top: -40px; left: -40px;
+        width: 160px; height: 160px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+        pointer-events: none;
+        z-index: 0;
     }
 
     /* ── Textos dentro del card ── */
