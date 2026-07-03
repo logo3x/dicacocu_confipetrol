@@ -1,169 +1,263 @@
 <x-filament-panels::page.simple>
     <style>
-    /* ===== SGD DICACOCU — Login branded ===== */
+    /* ===== SGD DICACOCU — Login ===== */
 
-    /* Fondo corporativo sobre el body de Filament */
-    body {
-        background: linear-gradient(135deg, #0A1F44 0%, #0D2A5E 45%, #0050A0 100%) !important;
-        min-height: 100vh;
-        position: relative;
+    /* ── Variables de paleta ── */
+    :root {
+        --sgd-dark:    #060F26;
+        --sgd-navy:    #0A1F44;
+        --sgd-blue:    #0D2A5E;
+        --sgd-mid:     #0050A0;
+        --sgd-orange:  #E8871A;
+        --sgd-gold:    #F5A940;
+        --sgd-light:   #FFD08A;
+        --sgd-card-bg: #0D1E40;
+        --sgd-input:   #112048;
+        --sgd-border:  #1E3A6E;
+        --sgd-border-focus: #E8871A;
     }
+
+    /* ── Fondo ── */
+    html, body {
+        background: var(--sgd-dark) !important;
+        min-height: 100vh;
+    }
+
+    /* Gradiente de fondo rico */
+    .fi-simple-layout,
+    .fi-simple-layout > div {
+        background: linear-gradient(150deg,
+            #04102A 0%,
+            #071840 30%,
+            #0A1F55 60%,
+            #0D2A6A 100%) !important;
+        min-height: 100vh;
+    }
+
+    /* Glow naranja superior derecho */
     body::before {
         content: '';
         position: fixed;
-        top: -25%;
-        right: -12%;
-        width: 55vw;
-        height: 55vw;
+        top: -20%;
+        right: -8%;
+        width: 50vw;
+        height: 50vw;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(232,135,26,0.16) 0%, transparent 60%);
+        background: radial-gradient(circle,
+            rgba(232,135,26,0.22) 0%,
+            rgba(232,135,26,0.08) 40%,
+            transparent 70%);
         pointer-events: none;
-        animation: sgdGlow 8s ease-in-out infinite alternate;
         z-index: 0;
+        animation: sgdGlow 9s ease-in-out infinite alternate;
     }
+
+    /* Glow azul inferior izquierdo */
     body::after {
         content: '';
         position: fixed;
-        bottom: -18%;
-        left: -8%;
-        width: 42vw;
-        height: 42vw;
+        bottom: -15%;
+        left: -6%;
+        width: 38vw;
+        height: 38vw;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(0,50,130,0.5) 0%, transparent 65%);
+        background: radial-gradient(circle,
+            rgba(0,80,160,0.5) 0%,
+            transparent 65%);
         pointer-events: none;
-        animation: sgdGlow 11s 2s ease-in-out infinite alternate-reverse;
         z-index: 0;
+        animation: sgdGlow 12s 3s ease-in-out infinite alternate-reverse;
     }
+
+    /* Rejilla sutil */
     .sgd-grid-overlay {
         position: fixed;
         inset: 0;
         background-image:
-            linear-gradient(rgba(255,255,255,0.022) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.022) 1px, transparent 1px);
+            linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
         background-size: 52px 52px;
         pointer-events: none;
         z-index: 0;
     }
 
-    /* Header corporativo encima del card */
+    /* ── Header corporativo ── */
     .sgd-login-header {
         text-align: center;
-        margin-bottom: 2rem;
+        margin-bottom: 1.75rem;
         animation: sgdSlideDown 0.55s cubic-bezier(0.16,1,0.3,1) both;
         position: relative;
         z-index: 1;
     }
     .sgd-login-logo {
         width: auto;
-        height: 50px;
+        height: 48px;
         display: block;
-        margin: 0 auto 1.125rem;
+        margin: 0 auto 1rem;
         filter: brightness(0) invert(1);
-        opacity: 0.9;
+        opacity: 0.93;
+        drop-shadow: 0 2px 8px rgba(0,0,0,0.4);
     }
     .sgd-login-app-name {
         font-family: 'Montserrat', sans-serif;
         font-weight: 800;
         font-size: 1.5rem;
-        letter-spacing: -0.025em;
+        letter-spacing: -0.02em;
         color: #fff;
         line-height: 1.1;
         margin: 0 0 0.3rem;
     }
     .sgd-login-app-sub {
         font-family: 'Montserrat', sans-serif;
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 600;
-        color: rgba(255,255,255,0.55);
-        letter-spacing: 0.14em;
+        color: rgba(255,255,255,0.5);
+        letter-spacing: 0.16em;
         text-transform: uppercase;
     }
     .sgd-login-accent-line {
-        width: 2.75rem;
+        width: 2.5rem;
         height: 3px;
-        background: linear-gradient(90deg, #E8871A, #F5A940);
+        background: linear-gradient(90deg, var(--sgd-orange), var(--sgd-gold));
         border-radius: 2px;
-        margin: 0.875rem auto 0;
+        margin: 0.75rem auto 0;
+        box-shadow: 0 0 12px rgba(232,135,26,0.5);
     }
 
-    /* Sobreescribir el card de Filament */
+    /* ── Card del formulario ── */
     .fi-simple-main {
-        background: rgba(255,255,255,0.05) !important;
-        backdrop-filter: blur(20px) saturate(1.3) !important;
-        border: 1px solid rgba(255,255,255,0.11) !important;
-        border-radius: 1.25rem !important;
+        background: var(--sgd-card-bg) !important;
+        border: 1px solid var(--sgd-border) !important;
+        border-radius: 1.125rem !important;
         box-shadow:
-            0 6px 40px rgba(0,0,0,0.4),
-            0 1px 0 rgba(255,255,255,0.06) inset !important;
+            0 0 0 1px rgba(255,255,255,0.04) inset,
+            0 8px 48px rgba(0,0,0,0.55),
+            0 2px 0 rgba(255,255,255,0.05) inset !important;
         animation: sgdScaleIn 0.5s 0.18s cubic-bezier(0.16,1,0.3,1) both;
         position: relative;
         z-index: 1;
+        overflow: hidden;
     }
 
-    /* Textos dentro del card */
+    /* Barra naranja superior del card */
+    .fi-simple-main::before {
+        content: '';
+        display: block;
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(90deg,
+            transparent 0%,
+            var(--sgd-orange) 20%,
+            var(--sgd-gold) 60%,
+            transparent 100%);
+        z-index: 2;
+    }
+
+    /* ── Textos dentro del card ── */
     .fi-simple-main label,
+    .fi-simple-main .fi-fo-field-wrp-label,
     .fi-simple-main .fi-fo-field-wrp-label span,
-    .fi-simple-main p:not(.fi-fo-field-wrp-error-message) {
-        color: rgba(255,255,255,0.82) !important;
+    .fi-simple-main [class*="fi-fo"] label {
+        color: #C8D8F0 !important;
+        font-family: 'Montserrat', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 0.8125rem !important;
     }
 
-    /* Inputs */
+    /* ── Inputs ── */
     .fi-simple-main input[type="email"],
     .fi-simple-main input[type="password"],
     .fi-simple-main input[type="text"] {
-        background: rgba(255,255,255,0.07) !important;
-        border-color: rgba(255,255,255,0.14) !important;
-        color: #fff !important;
-        border-radius: 0.625rem !important;
-        transition: border-color 0.2s, box-shadow 0.2s !important;
+        background: var(--sgd-input) !important;
+        border: 1.5px solid var(--sgd-border) !important;
+        color: #E8F0FF !important;
+        border-radius: 0.5rem !important;
+        font-size: 0.9375rem !important;
+        padding-block: 0.625rem !important;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease !important;
     }
     .fi-simple-main input::placeholder {
-        color: rgba(255,255,255,0.3) !important;
+        color: rgba(160,190,230,0.4) !important;
     }
-    .fi-simple-main input:focus {
-        border-color: rgba(232,135,26,0.65) !important;
-        box-shadow: 0 0 0 3px rgba(232,135,26,0.16) !important;
-        background: rgba(255,255,255,0.1) !important;
+    .fi-simple-main input:focus,
+    .fi-simple-main input:focus-visible {
+        background: #162B55 !important;
+        border-color: var(--sgd-orange) !important;
+        box-shadow: 0 0 0 3px rgba(232,135,26,0.2), 0 0 12px rgba(232,135,26,0.1) !important;
+        outline: none !important;
     }
 
-    /* Botón enviar */
-    .fi-simple-main .fi-btn-color-primary,
+    /* Icono del ojo en password */
+    .fi-simple-main [data-icon],
+    .fi-simple-main .fi-input-suffix-item svg {
+        color: rgba(160,190,230,0.5) !important;
+    }
+
+    /* ── Botón de acceso ── */
+    .fi-simple-main .fi-btn,
     .fi-simple-main button[type="submit"] {
-        background: linear-gradient(135deg, #E8871A 0%, #F5A940 100%) !important;
+        background: linear-gradient(135deg, #C97315 0%, var(--sgd-orange) 45%, var(--sgd-gold) 100%) !important;
         border: none !important;
-        border-radius: 0.625rem !important;
+        border-radius: 0.5rem !important;
+        color: #fff !important;
         font-family: 'Montserrat', sans-serif !important;
         font-weight: 700 !important;
         font-size: 0.9375rem !important;
-        box-shadow: 0 4px 18px rgba(232,135,26,0.38) !important;
-        transition: transform 0.15s ease, box-shadow 0.15s ease !important;
+        letter-spacing: 0.01em !important;
+        box-shadow: 0 4px 20px rgba(232,135,26,0.45), 0 1px 0 rgba(255,255,255,0.15) inset !important;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease !important;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.25) !important;
     }
-    .fi-simple-main .fi-btn-color-primary:hover,
+    .fi-simple-main .fi-btn:hover,
     .fi-simple-main button[type="submit"]:hover {
+        filter: brightness(1.08) !important;
         transform: translateY(-1px) !important;
-        box-shadow: 0 6px 24px rgba(232,135,26,0.5) !important;
+        box-shadow: 0 6px 28px rgba(232,135,26,0.55), 0 1px 0 rgba(255,255,255,0.15) inset !important;
+    }
+    .fi-simple-main .fi-btn:active,
+    .fi-simple-main button[type="submit"]:active {
+        transform: translateY(0) !important;
+        filter: brightness(0.95) !important;
     }
 
-    /* Links */
-    .fi-simple-main a { color: #F5A940 !important; }
-    .fi-simple-main a:hover { color: #FFB84D !important; }
+    /* ── Links (¿Olvidó contraseña?) ── */
+    .fi-simple-main a {
+        color: var(--sgd-gold) !important;
+        font-weight: 600 !important;
+        transition: color 0.15s !important;
+    }
+    .fi-simple-main a:hover { color: var(--sgd-light) !important; }
 
-    /* Checkbox "Recuérdame" */
+    /* ── Checkbox "Recuérdame" ── */
+    .fi-simple-main .fi-checkbox-input {
+        border-color: var(--sgd-border) !important;
+        background: var(--sgd-input) !important;
+    }
     .fi-simple-main .fi-checkbox-input:checked {
-        background-color: #E8871A !important;
-        border-color: #E8871A !important;
+        background-color: var(--sgd-orange) !important;
+        border-color: var(--sgd-orange) !important;
     }
 
-    /* Error messages */
-    .fi-simple-main .fi-fo-field-wrp-error-message { color: #fca5a5 !important; }
+    /* ── Mensajes de error ── */
+    .fi-simple-main .fi-fo-field-wrp-error-message,
+    .fi-simple-main [class*="error"] p {
+        color: #FCA5A5 !important;
+        font-size: 0.8125rem !important;
+    }
+    .fi-simple-main input.fi-input-invalid,
+    .fi-simple-main input[aria-invalid="true"] {
+        border-color: #F87171 !important;
+        box-shadow: 0 0 0 3px rgba(248,113,113,0.18) !important;
+    }
 
-    /* Pillars DICACOCU debajo del card */
+    /* ── Pillars DICACOCU ── */
     .sgd-pillars {
         display: flex;
         justify-content: center;
-        gap: 2.25rem;
+        gap: 2rem;
         margin-top: 2rem;
-        animation: sgdFadeUp 0.6s 0.7s cubic-bezier(0.16,1,0.3,1) both;
+        animation: sgdFadeUp 0.6s 0.75s cubic-bezier(0.16,1,0.3,1) both;
         position: relative;
         z-index: 1;
     }
@@ -172,39 +266,48 @@
         font-family: 'Montserrat', sans-serif;
         font-weight: 800;
         font-size: 1.25rem;
-        color: #E8871A;
+        background: linear-gradient(135deg, var(--sgd-orange), var(--sgd-gold));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
         line-height: 1;
         margin-bottom: 0.25rem;
     }
     .sgd-pillar__label {
-        font-size: 0.6rem;
+        font-size: 0.5875rem;
         font-weight: 700;
         text-transform: uppercase;
-        letter-spacing: 0.1em;
-        color: rgba(255,255,255,0.42);
+        letter-spacing: 0.09em;
+        color: rgba(160,190,230,0.45);
+    }
+    .sgd-pillar-divider {
+        width: 1px;
+        height: 2rem;
+        background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.12), transparent);
+        align-self: center;
     }
 
-    /* Keyframes */
+    /* ── Keyframes ── */
     @keyframes sgdGlow {
-        from { transform: translate(0,0) scale(1); opacity: 1; }
-        to   { transform: translate(3%,3%) scale(1.06); opacity: 0.7; }
+        from { opacity: 1;   transform: translate(0,0)   scale(1); }
+        to   { opacity: 0.6; transform: translate(2%,2%) scale(1.05); }
     }
     @keyframes sgdSlideDown {
-        from { opacity: 0; transform: translateY(-18px); }
+        from { opacity: 0; transform: translateY(-20px); }
         to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes sgdFadeUp {
-        from { opacity: 0; transform: translateY(14px); }
+        from { opacity: 0; transform: translateY(16px); }
         to   { opacity: 1; transform: translateY(0); }
     }
     @keyframes sgdScaleIn {
-        from { opacity: 0; transform: scale(0.97) translateY(10px); }
+        from { opacity: 0; transform: scale(0.96) translateY(12px); }
         to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
     @media (prefers-reduced-motion: reduce) {
-        body::before, body::after { animation: none; }
-        .sgd-login-header, .fi-simple-main, .sgd-pillars { animation: none; opacity: 1; transform: none; }
+        body::before, body::after { animation: none !important; }
+        .sgd-login-header, .fi-simple-main, .sgd-pillars { animation: none !important; opacity: 1 !important; transform: none !important; }
     }
     </style>
 

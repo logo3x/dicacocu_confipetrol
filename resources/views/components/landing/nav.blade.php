@@ -16,7 +16,7 @@
     {{-- Main bar --}}
     <div class="cp-container cp-nav__main">
         <a href="{{ route('landing') }}" class="cp-nav__logo">
-            <img src="{{ asset('images/confipetrol-logo.png') }}" alt="Confipetrol" height="38">
+            <img src="{{ asset('images/confipetrol-logo.png') }}" alt="Confipetrol">
         </a>
 
         <nav class="cp-nav__links" role="navigation" aria-label="Menú principal">
@@ -60,7 +60,7 @@
     justify-content: flex-end;
     align-items: center;
     gap: 1.25rem;
-    padding-block: 0.375rem;
+    padding-block: 0.25rem;
     font-family: var(--font-display);
     font-size: 0.75rem;
     font-weight: 500;
@@ -84,10 +84,15 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
-    padding-block: 0.875rem;
+    padding-block: 0.5rem;
 }
 
-.cp-nav__logo img { display: block; }
+.cp-nav__logo img {
+    display: block;
+    height: 36px;
+    width: auto;
+    object-fit: contain;
+}
 
 .cp-nav__links {
     display: flex;
