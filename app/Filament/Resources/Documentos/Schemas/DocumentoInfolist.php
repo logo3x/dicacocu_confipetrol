@@ -20,7 +20,6 @@ class DocumentoInfolist
                     ->schema([
                         TextEntry::make('titulo')
                             ->label('Título')
-                            ->size(TextEntry\TextEntrySize::Large)
                             ->weight(FontWeight::Bold)
                             ->columnSpanFull(),
 
