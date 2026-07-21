@@ -113,38 +113,6 @@
         .sgd-filter-select option { background: #0d2a6e; color: #fff; }
         .sgd-filter-select:focus { border-color: #E8871A; }
 
-        /* ── Pillars (estado inicial) ── */
-        .sgd-pillars-grid {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin-top: 1.5rem;
-        }
-        .sgd-pillar-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.4rem 0.875rem;
-            border-radius: 999px;
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: rgba(255,255,255,0.7);
-            font-size: 0.75rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.15s, border-color 0.15s, color 0.15s;
-        }
-        .sgd-pillar-chip:hover {
-            background: rgba(232,135,26,0.2);
-            border-color: rgba(232,135,26,0.4);
-            color: #F5A940;
-        }
-        .sgd-pillar-chip__letter {
-            font-weight: 800;
-            color: #E8871A;
-        }
-
         /* ── Resultados ── */
         .sgd-result-card {
             animation: fadeInUp 0.28s ease both;
@@ -189,21 +157,15 @@
 
                 {{-- Filtros --}}
                 <div class="sgd-filter-group">
-                    <select class="sgd-filter-select" wire:model.live="filtroFase">
-                        @foreach($fases as $value => $label)
-                            <option value="{{ $value }}">{{ $label }}</option>
-                        @endforeach
-                    </select>
-
                     <select class="sgd-filter-select" wire:model.live="filtroTipo">
                         @foreach($tipos as $value => $label)
                             <option value="{{ $value }}">{{ $label }}</option>
                         @endforeach
                     </select>
 
-                    @if($busqueda || $filtroFase || $filtroTipo)
+                    @if($busqueda || $filtroTipo)
                         <button
-                            wire:click="$set('busqueda', ''); $set('filtroFase', ''); $set('filtroTipo', '')"
+                            wire:click="$set('busqueda', ''); $set('filtroTipo', '')"
                             class="px-3 py-2 rounded-lg border border-white/20 bg-white/10 text-white/70 text-xs font-medium hover:bg-white/20 hover:text-white transition-all"
                             title="Limpiar filtros"
                         >
@@ -215,27 +177,15 @@
                     @endif
                 </div>
             </div>
-
-            {{-- Pillars rápidos (estado inicial) --}}
-            @if(strlen($busqueda) < 2 && !$filtroFase && !$filtroTipo)
-                <div class="sgd-pillars-grid">
-                    @foreach(['D' => 'Disponibilidad', 'I' => 'Integridad', 'C' => 'Calidad', 'A' => 'Acceso', 'O' => 'Operación', 'U' => 'Uso'] as $letra => $nombre)
-                        <button class="sgd-pillar-chip" wire:click="$set('filtroFase', '{{ $letra }}')">
-                            <span class="sgd-pillar-chip__letter">{{ $letra }}</span>
-                            {{ $nombre }}
-                        </button>
-                    @endforeach
-                </div>
-            @endif
         </div>
 
         {{-- ── Estado inicial ── --}}
-        @if(strlen($busqueda) < 2 && !$filtroFase && !$filtroTipo)
+        @if(strlen($busqueda) < 2 && !$filtroTipo)
             <div class="sgd-empty text-center py-12">
                 <svg class="mx-auto mb-3 h-12 w-12 text-gray-300 dark:text-gray-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m5.231 13.481L15 17.25m-4.5-15H5.625c-.621 0-1.125.504-1.125 1.125v16.5c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Zm3.75 11.625a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
-                <p class="text-gray-500 dark:text-gray-400 font-medium">Escribe al menos 2 caracteres o selecciona una fase para comenzar</p>
+                <p class="text-gray-500 dark:text-gray-400 font-medium">Escribe al menos 2 caracteres para comenzar</p>
             </div>
 
         {{-- ── Sin resultados ── --}}
@@ -273,11 +223,6 @@
                                     @if($doc->codigo)
                                         <span class="font-mono text-xs bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded text-gray-600 dark:text-gray-300 tracking-tight">
                                             {{ e($doc->codigo) }}
-                                        </span>
-                                    @endif
-                                    @if($doc->fase_dicacocu)
-                                        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 border border-primary-200 dark:border-primary-800">
-                                            {{ $doc->fase_dicacocu }}
                                         </span>
                                     @endif
                                     <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium

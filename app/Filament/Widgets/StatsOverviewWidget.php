@@ -11,6 +11,8 @@ class StatsOverviewWidget extends BaseStatsOverviewWidget
 {
     protected ?string $pollingInterval = '30s';
 
+    protected static ?int $sort = 2;
+
     protected function getStats(): array
     {
         $stats = Cache::remember('sgd_dashboard_stats', 60, function () {

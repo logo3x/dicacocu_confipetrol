@@ -3,14 +3,11 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     public function run(): void
     {
         $this->call(RolesPermissionsSeeder::class);
@@ -33,6 +30,7 @@ class DatabaseSeeder extends Seeder
                 'sede' => 'Bogotá',
                 'password' => 'Admin@2026!',
                 'rol' => 'admin',
+                'roles_do' => ['calidad_corporativa'],
             ],
             [
                 'email' => 'gestor@confipetrol.com',
@@ -42,6 +40,7 @@ class DatabaseSeeder extends Seeder
                 'sede' => 'Medellín',
                 'password' => 'Gestor@2026!',
                 'rol' => 'gestor_documental',
+                'roles_do' => ['responsable_hseq'],
             ],
             [
                 'email' => 'operativo@confipetrol.com',
@@ -51,6 +50,7 @@ class DatabaseSeeder extends Seeder
                 'sede' => 'Barrancabermeja',
                 'password' => 'Operativo@2026!',
                 'rol' => 'operativo',
+                'roles_do' => ['lider_om', 'personal_tecnico'],
             ],
         ];
 
@@ -71,6 +71,16 @@ class DatabaseSeeder extends Seeder
             if (! $user->hasRole($datos['rol'])) {
                 $user->assignRole($datos['rol']);
             }
+
+            foreach ($datos['roles_do'] ?? [] as $rolDo) {
+                if (! $user->hasRole($rolDo)) {
+                    $user->assignRole($rolDo);
+                }
+            }
         }
+
+        $this->call(DemoDataSeeder::class);
+        $this->call(ActividadesEjemploSeeder::class);
+        $this->call(CompromisosDoSeeder::class);
     }
 }

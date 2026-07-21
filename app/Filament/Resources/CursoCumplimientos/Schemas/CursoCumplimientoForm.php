@@ -32,17 +32,6 @@ class CursoCumplimientoForm
                             ->rows(3)
                             ->columnSpanFull(),
 
-                        Select::make('fase_dicacocu')
-                            ->label('Fase DICACOCU asociada')
-                            ->options([
-                                'D' => 'D — Disponibilidad',
-                                'I' => 'I — Integridad',
-                                'C' => 'C — Calidad',
-                                'A' => 'A — Acceso',
-                                'O' => 'O — Operación',
-                                'U' => 'U — Uso',
-                            ]),
-
                         Select::make('estado')
                             ->label('Estado')
                             ->options([

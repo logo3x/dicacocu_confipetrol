@@ -25,12 +25,6 @@ class CursoCumplimientosTable
                     ->limit(50)
                     ->tooltip(fn ($record) => $record->titulo),
 
-                TextColumn::make('fase_dicacocu')
-                    ->label('Fase')
-                    ->badge()
-                    ->color('primary')
-                    ->placeholder('—'),
-
                 TextColumn::make('estado')
                     ->label('Estado')
                     ->badge()
@@ -76,17 +70,6 @@ class CursoCumplimientosTable
                         'activo' => 'Activo',
                         'inactivo' => 'Inactivo',
                         'borrador' => 'Borrador',
-                    ]),
-
-                SelectFilter::make('fase_dicacocu')
-                    ->label('Fase DICACOCU')
-                    ->options([
-                        'D' => 'D — Disponibilidad',
-                        'I' => 'I — Integridad',
-                        'C' => 'C — Calidad',
-                        'A' => 'A — Acceso',
-                        'O' => 'O — Operación',
-                        'U' => 'U — Uso',
                     ]),
 
                 TrashedFilter::make(),

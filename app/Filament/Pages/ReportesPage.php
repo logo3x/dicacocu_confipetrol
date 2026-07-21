@@ -2,9 +2,7 @@
 
 namespace App\Filament\Pages;
 
-use App\Filament\Widgets\ComplianceFasesWidget;
 use App\Filament\Widgets\DocumentosPorEstadoChart;
-use App\Filament\Widgets\DocumentosPorFaseChart;
 use App\Filament\Widgets\DocumentosVencidosWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use BackedEnum;
@@ -29,9 +27,7 @@ class ReportesPage extends Dashboard
     {
         return [
             StatsOverviewWidget::class,
-            DocumentosPorFaseChart::class,
             DocumentosPorEstadoChart::class,
-            ComplianceFasesWidget::class,
             DocumentosVencidosWidget::class,
         ];
     }

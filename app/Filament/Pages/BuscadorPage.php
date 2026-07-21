@@ -27,9 +27,6 @@ class BuscadorPage extends Page
     #[Url(as: 'q')]
     public string $busqueda = '';
 
-    #[Url(as: 'fase')]
-    public string $filtroFase = '';
-
     #[Url(as: 'tipo')]
     public string $filtroTipo = '';
 
@@ -43,7 +40,7 @@ class BuscadorPage extends Page
     #[Computed]
     public function resultados(): Collection
     {
-        if (strlen($this->busqueda) < 2 && empty($this->filtroFase) && empty($this->filtroTipo)) {
+        if (strlen($this->busqueda) < 2 && empty($this->filtroTipo)) {
             return collect();
         }
 
@@ -60,10 +57,6 @@ class BuscadorPage extends Page
             });
         }
 
-        if ($this->filtroFase) {
-            $query->where('fase_dicacocu', $this->filtroFase);
-        }
-
         if ($this->filtroTipo) {
             $query->where('tipo_documento', $this->filtroTipo);
         }
@@ -74,15 +67,6 @@ class BuscadorPage extends Page
     protected function getViewData(): array
     {
         return [
-            'fases' => [
-                '' => 'Todas las fases',
-                'D' => 'D — Disponibilidad',
-                'I' => 'I — Integridad',
-                'C' => 'C — Calidad',
-                'A' => 'A — Acceso',
-                'O' => 'O — Operación',
-                'U' => 'U — Uso',
-            ],
             'tipos' => [
                 '' => 'Todos los tipos',
                 'procedimiento' => 'Procedimiento',

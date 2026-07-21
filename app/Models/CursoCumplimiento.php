@@ -19,7 +19,6 @@ class CursoCumplimiento extends Model
     protected $fillable = [
         'titulo',
         'descripcion',
-        'fase_dicacocu',
         'estado',
         'created_by',
         'documentos_ids',

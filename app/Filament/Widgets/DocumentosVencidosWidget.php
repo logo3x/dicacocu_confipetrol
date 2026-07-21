@@ -44,11 +44,6 @@ class DocumentosVencidosWidget extends TableWidget
                     ->limit(45)
                     ->tooltip(fn ($record) => $record->titulo),
 
-                TextColumn::make('fase_dicacocu')
-                    ->label('Fase')
-                    ->badge()
-                    ->color('primary'),
-
                 TextColumn::make('fecha_vencimiento')
                     ->label('Vencimiento')
                     ->date('d/m/Y')

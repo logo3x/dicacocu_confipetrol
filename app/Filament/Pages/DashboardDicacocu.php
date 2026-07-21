@@ -2,8 +2,12 @@
 
 namespace App\Filament\Pages;
 
+use App\Filament\Widgets\ActividadesResumenWidget;
+use App\Filament\Widgets\CompromisosProximosWidget;
+use App\Filament\Widgets\DocumentosPorEstadoChart;
 use App\Filament\Widgets\DocumentosRecientesWidget;
-use App\Filament\Widgets\FasesDicacoCuWidget;
+use App\Filament\Widgets\DocumentosVencidosWidget;
+use App\Filament\Widgets\IndicadoresDicacocoWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard;
@@ -26,9 +30,13 @@ class DashboardDicacocu extends Dashboard
     {
         return [
             AccountWidget::class,
+            IndicadoresDicacocoWidget::class,
             StatsOverviewWidget::class,
-            FasesDicacoCuWidget::class,
+            ActividadesResumenWidget::class,
+            DocumentosPorEstadoChart::class,
             DocumentosRecientesWidget::class,
+            DocumentosVencidosWidget::class,
+            CompromisosProximosWidget::class,
         ];
     }
 }

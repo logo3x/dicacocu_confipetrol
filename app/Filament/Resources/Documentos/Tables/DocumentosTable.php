@@ -79,11 +79,6 @@ class DocumentosTable
                         default => 'gray',
                     }),
 
-                TextColumn::make('fase_dicacocu')
-                    ->label('Fase')
-                    ->badge()
-                    ->color('primary'),
-
                 TextColumn::make('responsable.name')
                     ->label('Responsable')
                     ->searchable()
@@ -141,17 +136,6 @@ class DocumentosTable
                         'manual' => 'Manual',
                         'politica' => 'Política',
                         'norma' => 'Norma',
-                    ]),
-
-                SelectFilter::make('fase_dicacocu')
-                    ->label('Fase DICACOCU')
-                    ->options([
-                        'D' => 'D — Disponibilidad',
-                        'I' => 'I — Integridad',
-                        'C' => 'C — Calidad',
-                        'A' => 'A — Acceso',
-                        'O' => 'O — Operación',
-                        'U' => 'U — Uso',
                     ]),
 
                 TrashedFilter::make(),

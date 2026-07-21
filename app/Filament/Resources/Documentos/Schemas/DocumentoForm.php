@@ -46,19 +46,6 @@ class DocumentoForm
                             ])
                             ->default('procedimiento'),
 
-                        Select::make('fase_dicacocu')
-                            ->label('Fase DICACOCU')
-                            ->options([
-                                'D' => 'D — Disponibilidad',
-                                'I' => 'I — Integridad',
-                                'C' => 'C — Calidad',
-                                'A' => 'A — Acceso',
-                                'C2' => 'C — Comunicación',
-                                'O' => 'O — Operación',
-                                'C3' => 'C — Cumplimiento',
-                                'U' => 'U — Uso',
-                            ]),
-
                         Select::make('carpeta_id')
                             ->label('Carpeta')
                             ->relationship('carpeta', 'nombre')

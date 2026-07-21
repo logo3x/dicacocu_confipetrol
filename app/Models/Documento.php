@@ -28,7 +28,6 @@ class Documento extends Model implements HasMedia
         'created_by',
         'responsable_id',
         'aprobador_id',
-        'fase_dicacocu',
         'fecha_emision',
         'fecha_revision',
         'fecha_vencimiento',

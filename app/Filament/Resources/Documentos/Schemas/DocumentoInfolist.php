@@ -72,11 +72,6 @@ class DocumentoInfolist
                                 default => $state,
                             }),
 
-                        TextEntry::make('fase_dicacocu')
-                            ->label('Fase DICACOCU')
-                            ->badge()
-                            ->color('primary'),
-
                         TextEntry::make('descripcion')
                             ->label('Descripción')
                             ->columnSpanFull()

@@ -15,7 +15,7 @@ class DocumentosRecientesWidget extends TableWidget
 
     protected int|string|array $columnSpan = 'full';
 
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 6;
 
     public function table(Table $table): Table
     {
@@ -79,11 +79,6 @@ class DocumentosRecientesWidget extends TableWidget
                         'rechazado' => 'danger',
                         default => 'gray',
                     }),
-
-                TextColumn::make('fase_dicacocu')
-                    ->label('Fase')
-                    ->badge()
-                    ->color('primary'),
 
                 TextColumn::make('creador.name')
                     ->label('Creado por'),

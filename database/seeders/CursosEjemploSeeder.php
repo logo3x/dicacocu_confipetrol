@@ -27,7 +27,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'Inducción al Sistema de Gestión Documental DICACOCU',
                 'descripcion' => 'Curso obligatorio para todo el personal que accede al SGD. Cubre el ciclo DICACOCU, el flujo de documentos y las responsabilidades de cada rol en la gestión documental de los contratos Ecopetrol.',
-                'fase_dicacocu' => 'CA',
                 'estado' => 'activo',
                 'created_by' => $admin->id,
                 'documentos_ids' => $docIds(['HSEQ-GCA1-P-2']),
@@ -84,7 +83,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'Trabajo Seguro en Alturas — Contratos Ecopetrol',
                 'descripcion' => 'Curso de cumplimiento legal y contractual para personal operativo que realiza actividades en alturas superiores a 1,5 m en instalaciones Ecopetrol. Basado en la Resolución 4272 de 2021 y el procedimiento interno HSEQ-SST-P-8.',
-                'fase_dicacocu' => 'DI',
                 'estado' => 'activo',
                 'created_by' => $gestor->id,
                 'documentos_ids' => $docIds(['HSEQ-SST-P-8', 'HSEQ-SST-F-3']),
@@ -141,7 +139,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'Respuesta a Emergencias Ambientales en Campo',
                 'descripcion' => 'Entrenamiento para el personal operativo en la identificación y respuesta inicial ante derrames, fugas e incendios en zonas de operación Ecopetrol. Incluye cadena de llamadas, acciones de primera respuesta y diligenciamiento del formato de reporte.',
-                'fase_dicacocu' => 'CO',
                 'estado' => 'activo',
                 'created_by' => $gestor->id,
                 'documentos_ids' => $docIds(['HSEQ-MA-P-4', 'OPS-EMER-P-1']),
@@ -190,7 +187,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'Mantenimiento Preventivo de Equipos Rotativos — Norma API 610',
                 'descripcion' => 'Curso técnico para personal de mantenimiento sobre la planificación y ejecución de mantenimiento preventivo en equipos de bombeo centrífugo según la norma API 610 y el procedimiento interno OPS-MANT-P-12.',
-                'fase_dicacocu' => 'CU',
                 'estado' => 'activo',
                 'created_by' => $gestor->id,
                 'documentos_ids' => $docIds(['OPS-MANT-P-12', 'OPS-MANT-F-7']),
@@ -239,7 +235,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'ISO 9001:2015 — Control de Documentos y Registros de Calidad',
                 'descripcion' => 'Formación en los requisitos de la norma ISO 9001:2015 para la creación, control y conservación de documentos y registros del sistema de gestión de calidad Confipetrol. Orientado a gestores documentales y coordinadores de área.',
-                'fase_dicacocu' => 'CA',
                 'estado' => 'activo',
                 'created_by' => $admin->id,
                 'documentos_ids' => $docIds(['CAL-POL-001', 'HSEQ-GCA1-P-2']),
@@ -296,7 +291,6 @@ class CursosEjemploSeeder extends Seeder
             [
                 'titulo' => 'Liderazgo Visible y Cultura de Seguridad Ecopetrol',
                 'descripcion' => 'Curso dirigido a supervisores y coordinadores sobre el modelo de liderazgo en HSE de Ecopetrol: observación preventiva de comportamientos, retroalimentación positiva y registro de intervenciones.',
-                'fase_dicacocu' => 'DI',
                 'estado' => 'borrador',
                 'created_by' => $admin->id,
                 'documentos_ids' => [],
