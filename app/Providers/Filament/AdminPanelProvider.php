@@ -43,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
                 'warning' => Color::Amber,
             ])
             ->font('Montserrat', provider: GoogleFontProvider::class)
+            ->viteTheme('resources/css/app.css')
             ->navigationGroups([
                 'Disciplina Operativa',
                 'Gestión Documental',
