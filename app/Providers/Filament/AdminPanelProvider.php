@@ -44,6 +44,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->font('Montserrat', provider: GoogleFontProvider::class)
             ->navigationGroups([
+                'Disciplina Operativa',
                 'Gestión Documental',
                 'Ciclo DICACOCU',
                 'Administración',
