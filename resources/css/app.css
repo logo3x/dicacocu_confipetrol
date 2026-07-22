@@ -1,8 +1,13 @@
 @import 'tailwindcss';
+@import '../../vendor/filament/filament/resources/css/index.css';
 @import './confipetrol-tokens.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
+@source '../../app/Filament/**/*.php';
+@source '../../resources/views/**/*.blade.php';
+@source '../../vendor/filament/**/*.php';
+@source '../../vendor/filament/**/*.blade.php';
 
 @theme {
     --font-sans:    'Source Sans 3', ui-sans-serif, system-ui, sans-serif;
