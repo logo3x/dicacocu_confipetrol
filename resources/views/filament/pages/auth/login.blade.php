@@ -132,7 +132,7 @@
         animation: sgdFadeUp 0.6s 0.15s cubic-bezier(0.16,1,0.3,1) both;
     }
 
-    .sgd-visual-message h1 {
+    .sgd-login-visual .sgd-visual-message h1 {
         font-family: 'Montserrat', sans-serif;
         font-weight: 800;
         font-size: clamp(1.75rem, 3vw, 2.75rem);
@@ -140,12 +140,13 @@
         line-height: 1.12;
         margin: 0 0 1rem;
         text-wrap: balance;
+        color: #fff !important;
     }
 
-    .sgd-visual-message p {
+    .sgd-login-visual .sgd-visual-message p {
         font-size: 0.9375rem;
         line-height: 1.6;
-        color: rgba(226,235,250,0.72);
+        color: rgba(226,235,250,0.72) !important;
         margin: 0;
         max-width: 26rem;
     }
