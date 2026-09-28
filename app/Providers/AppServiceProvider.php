@@ -5,6 +5,8 @@ namespace App\Providers;
 use App\Models\AcompanamientoVerificacion;
 use App\Models\Actividad;
 use App\Models\Compromiso;
+use App\Models\Do\Campo;
+use App\Models\Do\Contrato;
 use App\Models\Do\EvaluacionF14;
 use App\Models\Do\ProcedimientoDo;
 use App\Models\Documento;
@@ -21,6 +23,8 @@ use App\Observers\InspeccionGerencialReglaObserver;
 use App\Policies\AcompanamientoVerificacionPolicy;
 use App\Policies\ActividadPolicy;
 use App\Policies\CompromisoPolicy;
+use App\Policies\Do\CampoPolicy;
+use App\Policies\Do\ContratoPolicy;
 use App\Policies\Do\EvaluacionF14Policy;
 use App\Policies\Do\ProcedimientoDoPolicy;
 use App\Policies\DocumentoPolicy;
@@ -41,6 +45,8 @@ class AppServiceProvider extends AuthServiceProvider
         InspeccionGerencialAccion::class => InspeccionGerencialAccionPolicy::class,
         ProcedimientoDo::class => ProcedimientoDoPolicy::class,
         EvaluacionF14::class => EvaluacionF14Policy::class,
+        Contrato::class => ContratoPolicy::class,
+        Campo::class => CampoPolicy::class,
     ];
 
     public function register(): void {}

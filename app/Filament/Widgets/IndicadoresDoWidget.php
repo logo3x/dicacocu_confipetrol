@@ -19,7 +19,7 @@ class IndicadoresDoWidget extends BaseStatsOverviewWidget
 
     protected function getHeading(): ?string
     {
-        return 'Procedimientos DO — Indicadores DI / CA / CO / CU';
+        return 'Procedimientos DICACOCU — Indicadores DI / CA / CO / CU';
     }
 
     protected function getDescription(): ?string

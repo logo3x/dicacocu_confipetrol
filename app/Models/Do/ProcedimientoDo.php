@@ -54,6 +54,18 @@ class ProcedimientoDo extends Model
         return $this->hasMany(EvaluacionF14::class, 'procedimiento_id');
     }
 
+    /** @return BelongsTo<Contrato, $this> */
+    public function contrato(): BelongsTo
+    {
+        return $this->belongsTo(Contrato::class, 'contrato_id');
+    }
+
+    /** @return BelongsTo<Campo, $this> */
+    public function campo(): BelongsTo
+    {
+        return $this->belongsTo(Campo::class, 'campo_id');
+    }
+
     /** @return BelongsTo<User, $this> */
     public function responsableArea(): BelongsTo
     {

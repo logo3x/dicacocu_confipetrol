@@ -2,6 +2,8 @@
 
 namespace Database\Factories\Do;
 
+use App\Models\Do\Campo;
+use App\Models\Do\Contrato;
 use App\Models\Do\ProcedimientoDo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -16,8 +18,10 @@ class ProcedimientoDoFactory extends Factory
     {
         return [
             'anio_ciclo' => now()->year,
-            'contrato' => fake()->randomElement(['Ecopetrol Cusiana', 'Frontera Quifa', 'Oxy Caño Limón']),
-            'campo' => fake()->randomElement(['Cusiana', 'Quifa', 'Caño Limón']),
+            'contrato_id' => Contrato::factory(),
+            'campo_id' => fn (array $atributos) => Campo::factory()->create([
+                'contrato_id' => $atributos['contrato_id'],
+            ])->id,
             'nombre_actividad' => fake()->sentence(4),
             'fecha_identificacion' => now()->subDays(fake()->numberBetween(1, 120)),
             'personas_involucradas' => fake()->numberBetween(3, 30),

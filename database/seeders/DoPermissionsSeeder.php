@@ -24,6 +24,7 @@ class DoPermissionsSeeder extends Seeder
             'eliminar procedimientos do',
             'evaluar f14',
             'cerrar acciones f14',
+            'gestionar catalogos do',
         ];
 
         foreach ($permisos as $permiso) {
@@ -67,6 +68,15 @@ class DoPermissionsSeeder extends Seeder
 
         if ($lider = Role::where('name', 'lider_om')->first()) {
             $lider->givePermissionTo(['ver procedimientos do', 'crear procedimientos do', 'editar procedimientos do']);
+        }
+
+        if ($calidad = Role::where('name', 'calidad_corporativa')->first()) {
+            $calidad->givePermissionTo([
+                'ver procedimientos do',
+                'crear procedimientos do',
+                'editar procedimientos do',
+                'gestionar catalogos do',
+            ]);
         }
     }
 }

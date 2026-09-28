@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Do\ProcedimientosDo\Schemas;
 
 use App\Enums\Do\CriterioAmenaza;
+use App\Models\Do\Campo;
 use App\Models\User;
 use App\Services\Do\CalculadoraDo;
 use Carbon\Carbon;
@@ -16,6 +17,7 @@ use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 
 class ProcedimientoDoForm
@@ -24,7 +26,6 @@ class ProcedimientoDoForm
     {
         return $schema->components([
             Section::make('Identificación del registro')
-                ->columns(3)
                 ->schema([
                     TextInput::make('anio_ciclo')
                         ->label('Año del ciclo')
@@ -33,8 +34,6 @@ class ProcedimientoDoForm
                         ->default(now()->year)
                         ->minValue(2000)
                         ->maxValue(2100),
-                    TextInput::make('contrato')->label('Contrato')->required()->maxLength(191),
-                    TextInput::make('campo')->label('Campo')->required()->maxLength(191),
                 ]),
 
             Tabs::make('Etapas')
@@ -59,6 +58,30 @@ class ProcedimientoDoForm
                 Section::make('Inventario de actividades')
                     ->columns(3)
                     ->schema([
+                        Select::make('contrato_id')
+                            ->label('Contrato')
+                            ->relationship('contrato', 'nombre', fn ($query) => $query->activos())
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('campo_id', null))
+                            ->helperText('Se administra desde Contratos'),
+                        Select::make('campo_id')
+                            ->label('Campo')
+                            ->options(fn (Get $get) => $get('contrato_id')
+                                ? Campo::query()
+                                    ->activos()
+                                    ->where('contrato_id', $get('contrato_id'))
+                                    ->orderBy('nombre')
+                                    ->pluck('nombre', 'id')
+                                    ->all()
+                                : [])
+                            ->required()
+                            ->searchable()
+                            ->disabled(fn (Get $get): bool => blank($get('contrato_id')))
+                            ->helperText('Seleccione primero el contrato')
+                            ->columnSpan(2),
                         TextInput::make('nombre_actividad')
                             ->label('Nombre de la actividad')
                             ->required()

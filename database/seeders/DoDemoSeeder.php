@@ -4,13 +4,15 @@ namespace Database\Seeders;
 
 use App\Enums\Do\CumpleRegla;
 use App\Enums\Do\ReglaSalvaVidas;
+use App\Models\Do\Campo;
+use App\Models\Do\Contrato;
 use App\Models\Do\EvaluacionF14;
 use App\Models\Do\ProcedimientoDo;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
 /**
- * Datos de demostración del módulo de Procedimientos DO.
+ * Datos de demostración del módulo de Procedimientos DICACOCU.
  */
 class DoDemoSeeder extends Seeder
 {
@@ -24,10 +26,47 @@ class DoDemoSeeder extends Seeder
             return;
         }
 
+        $catalogo = [
+            'CTR-001' => [
+                'nombre' => 'Ecopetrol Cusiana',
+                'cliente' => 'Ecopetrol',
+                'campos' => ['Cusiana', 'Cupiagua'],
+            ],
+            'CTR-002' => [
+                'nombre' => 'Frontera Quifa',
+                'cliente' => 'Frontera Energy',
+                'campos' => ['Quifa', 'Rubiales'],
+            ],
+            'CTR-003' => [
+                'nombre' => 'Oxy Caño Limón',
+                'cliente' => 'Occidental',
+                'campos' => ['Caño Limón'],
+            ],
+        ];
+
+        $campos = [];
+
+        foreach ($catalogo as $codigo => $datos) {
+            $contrato = Contrato::firstOrCreate(
+                ['codigo' => $codigo],
+                [
+                    'nombre' => $datos['nombre'],
+                    'cliente' => $datos['cliente'],
+                    'activo' => true,
+                ],
+            );
+
+            foreach ($datos['campos'] as $nombreCampo) {
+                $campos[$nombreCampo] = Campo::firstOrCreate(
+                    ['contrato_id' => $contrato->id, 'nombre' => $nombreCampo],
+                    ['activo' => true],
+                );
+            }
+        }
+
         $procedimientos = [
             [
                 'nombre_actividad' => 'Mantenimiento de bomba centrífuga de crudo',
-                'contrato' => 'Ecopetrol Cusiana',
                 'campo' => 'Cusiana',
                 'personas_involucradas' => 12,
                 'amenaza_riesgo_critico' => true,
@@ -44,7 +83,6 @@ class DoDemoSeeder extends Seeder
             ],
             [
                 'nombre_actividad' => 'Inspección de líneas de proceso en altura',
-                'contrato' => 'Frontera Quifa',
                 'campo' => 'Quifa',
                 'personas_involucradas' => 8,
                 'amenaza_riesgo_critico' => true,
@@ -59,8 +97,7 @@ class DoDemoSeeder extends Seeder
             ],
             [
                 'nombre_actividad' => 'Limpieza de área administrativa',
-                'contrato' => 'Ecopetrol Cusiana',
-                'campo' => 'Cusiana',
+                'campo' => 'Cupiagua',
                 'personas_involucradas' => 4,
                 'amenaza_no_rutinaria' => true,
                 'personas_socializadas' => 4,
@@ -68,10 +105,15 @@ class DoDemoSeeder extends Seeder
         ];
 
         foreach ($procedimientos as $datos) {
+            $campo = $campos[$datos['campo']];
+            unset($datos['campo']);
+
             $procedimiento = ProcedimientoDo::firstOrCreate(
                 ['nombre_actividad' => $datos['nombre_actividad']],
                 array_merge($datos, [
                     'anio_ciclo' => now()->year,
+                    'contrato_id' => $campo->contrato_id,
+                    'campo_id' => $campo->id,
                     'fecha_identificacion' => now()->subMonths(2),
                     'responsable_area_id' => $operativo->id,
                     'observador_operativo_id' => $operativo->id,
@@ -90,7 +132,7 @@ class DoDemoSeeder extends Seeder
             $evaluacion = EvaluacionF14::create([
                 'procedimiento_id' => $procedimiento->id,
                 'fecha_ejecucion' => now()->subWeeks(2),
-                'campo' => $procedimiento->campo,
+                'campo' => $campo->nombre,
                 'area' => 'Operaciones',
                 'responsable_area_id' => $operativo->id,
                 'nombre_actividad_observada' => $procedimiento->nombre_actividad,

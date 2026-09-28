@@ -19,7 +19,7 @@ class EvaluacionF14Factory extends Factory
         return [
             'procedimiento_id' => ProcedimientoDo::factory(),
             'fecha_ejecucion' => now()->subDays(fake()->numberBetween(1, 60)),
-            'campo' => fake()->randomElement(['Cusiana', 'Quifa']),
+            'campo' => fake()->randomElement(['Cusiana', 'Quifa']), // texto libre del formato impreso
             'area' => fake()->randomElement(['Mantenimiento', 'Operaciones']),
             'nombre_actividad_observada' => fake()->sentence(4),
             'observador_id' => User::factory(),

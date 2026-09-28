@@ -45,7 +45,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Montserrat', provider: GoogleFontProvider::class)
             ->viteTheme('resources/css/app.css')
             ->navigationGroups([
-                'Procedimientos DO',
+                'Procedimientos DICACOCU',
                 'Disciplina Operativa',
                 'Gestión Documental',
                 'Ciclo DICACOCU',

@@ -27,7 +27,7 @@ class ProcedimientoDoResource extends Resource
 
     protected static ?string $navigationLabel = 'Procedimientos';
 
-    protected static string|\UnitEnum|null $navigationGroup = 'Procedimientos DO';
+    protected static string|\UnitEnum|null $navigationGroup = 'Procedimientos DICACOCU';
 
     protected static ?int $navigationSort = 1;
 

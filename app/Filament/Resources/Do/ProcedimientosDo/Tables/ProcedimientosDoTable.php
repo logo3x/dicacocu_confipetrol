@@ -26,8 +26,8 @@ class ProcedimientosDoTable
                     ->searchable()
                     ->wrap()
                     ->limit(60),
-                TextColumn::make('contrato')->label('Contrato')->searchable()->toggleable(),
-                TextColumn::make('campo')->label('Campo')->searchable()->toggleable(),
+                TextColumn::make('contrato.nombre')->label('Contrato')->searchable()->sortable()->toggleable(),
+                TextColumn::make('campo.nombre')->label('Campo')->searchable()->sortable()->toggleable(),
                 TextColumn::make('puntaje_prioridad')->label('Puntaje')->sortable(),
                 TextColumn::make('prioridad')
                     ->label('Prioridad')
@@ -66,6 +66,11 @@ class ProcedimientosDoTable
                     ->options(fn () => collect(PrioridadDo::cases())
                         ->mapWithKeys(fn (PrioridadDo $p) => [$p->value => $p->label()])
                         ->all()),
+                SelectFilter::make('contrato_id')
+                    ->label('Contrato')
+                    ->relationship('contrato', 'nombre')
+                    ->searchable()
+                    ->preload(),
                 SelectFilter::make('anio_ciclo')
                     ->label('Año del ciclo')
                     ->options(fn () => ProcedimientoDo::query()
