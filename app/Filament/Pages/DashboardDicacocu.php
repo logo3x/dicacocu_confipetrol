@@ -8,6 +8,7 @@ use App\Filament\Widgets\DocumentosPorEstadoChart;
 use App\Filament\Widgets\DocumentosRecientesWidget;
 use App\Filament\Widgets\DocumentosVencidosWidget;
 use App\Filament\Widgets\IndicadoresDicacocoWidget;
+use App\Filament\Widgets\IndicadoresDoWidget;
 use App\Filament\Widgets\StatsOverviewWidget;
 use BackedEnum;
 use Filament\Pages\Dashboard;
@@ -30,6 +31,7 @@ class DashboardDicacocu extends Dashboard
     {
         return [
             AccountWidget::class,
+            IndicadoresDoWidget::class,
             IndicadoresDicacocoWidget::class,
             StatsOverviewWidget::class,
             ActividadesResumenWidget::class,

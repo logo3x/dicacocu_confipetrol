@@ -5,18 +5,24 @@ namespace App\Providers;
 use App\Models\AcompanamientoVerificacion;
 use App\Models\Actividad;
 use App\Models\Compromiso;
+use App\Models\Do\EvaluacionF14;
+use App\Models\Do\ProcedimientoDo;
 use App\Models\Documento;
 use App\Models\InspeccionGerencialAccion;
 use App\Models\InspeccionGerencialRegla;
 use App\Observers\AcompanamientoVerificacionObserver;
 use App\Observers\ActividadObserver;
 use App\Observers\CompromisoObserver;
+use App\Observers\Do\EvaluacionF14Observer;
+use App\Observers\Do\ProcedimientoDoObserver;
 use App\Observers\DocumentoObserver;
 use App\Observers\InspeccionGerencialAccionObserver;
 use App\Observers\InspeccionGerencialReglaObserver;
 use App\Policies\AcompanamientoVerificacionPolicy;
 use App\Policies\ActividadPolicy;
 use App\Policies\CompromisoPolicy;
+use App\Policies\Do\EvaluacionF14Policy;
+use App\Policies\Do\ProcedimientoDoPolicy;
 use App\Policies\DocumentoPolicy;
 use App\Policies\InspeccionGerencialAccionPolicy;
 use App\Policies\InspeccionGerencialReglaPolicy;
@@ -33,6 +39,8 @@ class AppServiceProvider extends AuthServiceProvider
         Compromiso::class => CompromisoPolicy::class,
         InspeccionGerencialRegla::class => InspeccionGerencialReglaPolicy::class,
         InspeccionGerencialAccion::class => InspeccionGerencialAccionPolicy::class,
+        ProcedimientoDo::class => ProcedimientoDoPolicy::class,
+        EvaluacionF14::class => EvaluacionF14Policy::class,
     ];
 
     public function register(): void {}
@@ -49,6 +57,9 @@ class AppServiceProvider extends AuthServiceProvider
         Compromiso::observe(CompromisoObserver::class);
         InspeccionGerencialRegla::observe(InspeccionGerencialReglaObserver::class);
         InspeccionGerencialAccion::observe(InspeccionGerencialAccionObserver::class);
+
+        ProcedimientoDo::observe(ProcedimientoDoObserver::class);
+        EvaluacionF14::observe(EvaluacionF14Observer::class);
 
         // Superadmin omite todas las políticas
         Gate::before(function ($user, $ability) {
