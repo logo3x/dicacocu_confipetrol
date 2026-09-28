@@ -48,7 +48,7 @@ class CalculadoraDo
             return 0.0;
         }
 
-        return round(min($socializadas ?? 0, $involucradas) / $involucradas * 100, 2);
+        return round(($socializadas ?? 0) / $involucradas * 100, 2);
     }
 
     /**

@@ -14,6 +14,7 @@ use Filament\Support\Enums\Width;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class EvaluacionesF14RelationManager extends RelationManager
 {
@@ -33,6 +34,7 @@ class EvaluacionesF14RelationManager extends RelationManager
     public function table(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with('observador:id,name'))
             ->recordTitleAttribute('nombre_actividad_observada')
             ->columns([
                 TextColumn::make('fecha_ejecucion')->label('Fecha')->date('d/m/Y')->sortable(),

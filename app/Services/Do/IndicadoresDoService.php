@@ -12,11 +12,11 @@ use App\Support\Do\IndicadoresDo;
  */
 class IndicadoresDoService
 {
-    public static function calcular(?int $anioCiclo = null, ?string $contrato = null): IndicadoresDo
+    public static function calcular(?int $anioCiclo = null, ?int $contratoId = null): IndicadoresDo
     {
         $procedimientos = ProcedimientoDo::query()
             ->when($anioCiclo, fn ($q) => $q->where('anio_ciclo', $anioCiclo))
-            ->when($contrato, fn ($q) => $q->where('contrato', $contrato));
+            ->when($contratoId, fn ($q) => $q->where('contrato_id', $contratoId));
 
         $total = (clone $procedimientos)->count();
         $estandarizados = (clone $procedimientos)->whereNotNull('codigo_asignado')->count();
@@ -37,12 +37,12 @@ class IndicadoresDoService
         // CU — Cumplimiento: promedio de puntajes OPT de las evaluaciones F-14
         $cumplimiento = round((float) EvaluacionF14::query()
             ->when(
-                $anioCiclo || $contrato,
+                $anioCiclo || $contratoId,
                 fn ($q) => $q->whereHas(
                     'procedimiento',
                     fn ($p) => $p
                         ->when($anioCiclo, fn ($x) => $x->where('anio_ciclo', $anioCiclo))
-                        ->when($contrato, fn ($x) => $x->where('contrato', $contrato)),
+                        ->when($contratoId, fn ($x) => $x->where('contrato_id', $contratoId)),
                 ),
             )
             ->avg('puntaje_opt'), 2);

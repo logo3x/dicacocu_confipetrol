@@ -74,8 +74,10 @@ describe('cobertura de socialización', function () {
             ->and(CalculadoraDo::coberturaSocializacion(5, null))->toBe(0.0);
     });
 
-    it('no supera el 100% si se socializa a más personas de las involucradas', function () {
-        expect(CalculadoraDo::coberturaSocializacion(25, 20))->toBe(100.0);
+    it('refleja el desborde en lugar de ocultarlo con un tope', function () {
+        // El formulario impide capturar más socializados que involucrados; si la
+        // inconsistencia llega igual, debe verse en el indicador y no enmascararse.
+        expect(CalculadoraDo::coberturaSocializacion(25, 20))->toBe(125.0);
     });
 });
 

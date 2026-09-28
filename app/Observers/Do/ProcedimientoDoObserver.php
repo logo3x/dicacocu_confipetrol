@@ -5,6 +5,7 @@ namespace App\Observers\Do;
 use App\Enums\Do\CriterioAmenaza;
 use App\Models\Do\ProcedimientoDo;
 use App\Services\Do\CalculadoraDo;
+use Illuminate\Support\Facades\Cache;
 
 class ProcedimientoDoObserver
 {
@@ -30,7 +31,8 @@ class ProcedimientoDoObserver
                 ->addMonths($prioridad->plazoEstandarizacionMeses());
         }
 
-        if ($procedimiento->personas_socializadas === null) {
+        // Solo al crear: en un update, un valor vacío significa que aún no se socializó a nadie.
+        if (! $procedimiento->exists && $procedimiento->personas_socializadas === null) {
             $procedimiento->personas_socializadas = $procedimiento->personas_involucradas;
         }
 
@@ -38,5 +40,15 @@ class ProcedimientoDoObserver
             $procedimiento->personas_socializadas,
             $procedimiento->personas_involucradas,
         );
+    }
+
+    public function saved(ProcedimientoDo $procedimiento): void
+    {
+        Cache::forget('do_indicadores_procedimientos');
+    }
+
+    public function deleted(ProcedimientoDo $procedimiento): void
+    {
+        Cache::forget('do_indicadores_procedimientos');
     }
 }

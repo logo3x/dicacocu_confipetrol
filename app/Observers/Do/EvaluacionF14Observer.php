@@ -4,6 +4,7 @@ namespace App\Observers\Do;
 
 use App\Models\Do\EvaluacionF14;
 use App\Services\Do\CalculadoraDo;
+use Illuminate\Support\Facades\Cache;
 
 class EvaluacionF14Observer
 {
@@ -42,13 +43,19 @@ class EvaluacionF14Observer
             return;
         }
 
-        $promedio = $procedimiento->evaluaciones()->avg('puntaje_opt');
-        $ultimaEjecucion = $procedimiento->evaluaciones()->max('fecha_ejecucion');
+        $agregado = $procedimiento->evaluaciones()
+            ->toBase()
+            ->selectRaw('avg(puntaje_opt) as promedio, max(fecha_ejecucion) as ultima_ejecucion')
+            ->first();
+
+        $promedio = $agregado?->promedio;
 
         $procedimiento->forceFill([
             'puntaje_opt' => $promedio !== null ? round((float) $promedio, 2) : null,
             'criterio_opt' => CalculadoraDo::criterioOpt($promedio !== null ? (float) $promedio : null),
-            'fecha_ejecutada_verificacion' => $ultimaEjecucion,
+            'fecha_ejecutada_verificacion' => $agregado?->ultima_ejecucion,
         ])->saveQuietly();
+
+        Cache::forget('do_indicadores_procedimientos');
     }
 }

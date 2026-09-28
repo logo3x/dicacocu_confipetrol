@@ -17,6 +17,11 @@ class IndicadoresDoWidget extends BaseStatsOverviewWidget
 
     protected static ?int $sort = 0;
 
+    public static function canView(): bool
+    {
+        return auth()->user()?->can('ver procedimientos do') ?? false;
+    }
+
     protected function getHeading(): ?string
     {
         return 'Procedimientos DICACOCU — Indicadores DI / CA / CO / CU';

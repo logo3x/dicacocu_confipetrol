@@ -13,12 +13,14 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class ProcedimientosDoTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            ->modifyQueryUsing(fn (Builder $query) => $query->with(['contrato:id,nombre', 'campo:id,nombre']))
             ->columns([
                 TextColumn::make('anio_ciclo')->label('Año')->sortable(),
                 TextColumn::make('nombre_actividad')

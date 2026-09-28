@@ -39,6 +39,45 @@ it('usa el personal involucrado como valor por defecto de socializados', functio
         ->and((float) $procedimiento->cobertura_socializacion)->toBe(100.0);
 });
 
+it('respeta que se vacíe el personal socializado al editar', function () {
+    $procedimiento = ProcedimientoDo::factory()->create([
+        'personas_involucradas' => 20,
+        'personas_socializadas' => 20,
+    ]);
+
+    // Corregir a "aún no se socializó a nadie" no debe reponer el valor de la Etapa 1.
+    $procedimiento->update(['personas_socializadas' => null]);
+
+    expect($procedimiento->fresh()->personas_socializadas)->toBeNull()
+        ->and((float) $procedimiento->fresh()->cobertura_socializacion)->toBe(0.0);
+});
+
+it('respeta un cero explícito en el personal socializado', function () {
+    $procedimiento = ProcedimientoDo::factory()->create([
+        'personas_involucradas' => 10,
+        'personas_socializadas' => 0,
+    ]);
+
+    expect($procedimiento->personas_socializadas)->toBe(0)
+        ->and((float) $procedimiento->cobertura_socializacion)->toBe(0.0);
+});
+
+it('recalcula el promedio OPT al editar una evaluación existente', function () {
+    $procedimiento = ProcedimientoDo::factory()->create();
+
+    $evaluacion = EvaluacionF14::factory()->completa()->create([
+        'procedimiento_id' => $procedimiento->id,
+        'pasos_segun_procedimiento' => 5,
+        'pasos_en_observacion' => 5,
+    ]);
+
+    expect((float) $procedimiento->fresh()->puntaje_opt)->toBe(100.07);
+
+    $evaluacion->update(['pasos_en_observacion' => 3]);
+
+    expect((float) $procedimiento->fresh()->puntaje_opt)->toBe(70.07);
+});
+
 it('recalcula la cobertura cuando se edita el personal socializado', function () {
     $procedimiento = ProcedimientoDo::factory()->create([
         'personas_involucradas' => 20,

@@ -98,7 +98,13 @@ class ProcedimientoDoForm
                             ->required()
                             ->minValue(0)
                             ->default(0)
-                            ->live(onBlur: true),
+                            ->live(onBlur: true)
+                            // Propone el mismo valor en la Etapa 3 mientras el usuario no lo haya ajustado.
+                            ->afterStateUpdated(function (Get $get, Set $set, $state): void {
+                                if (blank($get('personas_socializadas'))) {
+                                    $set('personas_socializadas', $state);
+                                }
+                            }),
                     ]),
 
                 Section::make('Valoración de amenaza')
@@ -202,8 +208,13 @@ class ProcedimientoDoForm
                             ->numeric()
                             ->minValue(0)
                             ->live(onBlur: true)
-                            ->helperText('Toma por defecto el valor de la Etapa 1, pero es editable')
-                            ->default(fn (Get $get) => $get('personas_involucradas')),
+                            ->helperText(fn (Get $get): string => 'Sugerido: '.((int) $get('personas_involucradas'))
+                                .' personas involucradas (Etapa 1). Puede ajustarlo.')
+                            ->placeholder(fn (Get $get): string => (string) ((int) $get('personas_involucradas')))
+                            ->maxValue(fn (Get $get) => (int) $get('personas_involucradas'))
+                            ->validationMessages([
+                                'max' => 'No puede socializarse a más personas de las involucradas en la actividad.',
+                            ]),
                         Text::make(function (Get $get): string {
                             $cobertura = CalculadoraDo::coberturaSocializacion(
                                 (int) $get('personas_socializadas'),
