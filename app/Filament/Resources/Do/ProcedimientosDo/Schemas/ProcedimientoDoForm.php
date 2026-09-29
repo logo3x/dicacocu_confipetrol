@@ -19,46 +19,48 @@ use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Support\Str;
 
 class ProcedimientoDoForm
 {
-    /** Identificadores de las pestañas, usados para abrir una etapa concreta desde la URL. */
-    public const TAB_DI = 'etapa-di';
+    /** Etiquetas de las pestañas; Filament deriva de ellas el identificador de la URL. */
+    public const ETAPA_DI = '1 · DI';
 
-    public const TAB_CA = 'etapa-ca';
+    public const ETAPA_CA = '2 · CA';
 
-    public const TAB_CO = 'etapa-co';
+    public const ETAPA_CO = '3 · CO';
 
-    public const TAB_CU = 'etapa-cu';
+    public const ETAPA_CU = '4 · CU';
 
     /** Orden de las etapas, para avanzar a la siguiente al guardar. */
-    public const ORDEN_ETAPAS = [self::TAB_DI, self::TAB_CA, self::TAB_CO, self::TAB_CU];
+    public const ORDEN_ETAPAS = [self::ETAPA_DI, self::ETAPA_CA, self::ETAPA_CO, self::ETAPA_CU];
 
+    /**
+     * Identificador con el que Filament persiste una pestaña en la URL: el slug
+     * de la etiqueta más la ruta de estado del formulario.
+     */
+    public static function idEtapa(string $etiqueta): string
+    {
+        return Str::slug(Str::transliterate($etiqueta, strict: true)).'::data::tab';
+    }
+
+    /** Siguiente etapa a abrir, o null si ya se está en la última. */
     public static function siguienteEtapa(?string $etapaActual): ?string
     {
-        $indice = array_search($etapaActual ?? self::TAB_DI, self::ORDEN_ETAPAS, true);
+        $ids = array_map(self::idEtapa(...), self::ORDEN_ETAPAS);
+
+        $indice = array_search($etapaActual, $ids, true);
 
         if ($indice === false) {
-            return self::TAB_CA;
+            return $ids[1];
         }
 
-        return self::ORDEN_ETAPAS[$indice + 1] ?? null;
+        return $ids[$indice + 1] ?? null;
     }
 
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
-            Section::make('Identificación del registro')
-                ->schema([
-                    TextInput::make('anio_ciclo')
-                        ->label('Año del ciclo')
-                        ->numeric()
-                        ->required()
-                        ->default(now()->year)
-                        ->minValue(2000)
-                        ->maxValue(2100),
-                ]),
-
             Tabs::make('Etapas')
                 ->persistTabInQueryString()
                 ->columnSpanFull()
@@ -75,13 +77,19 @@ class ProcedimientoDoForm
     private static function etapaDi(): Tab
     {
         return Tab::make('Etapa 1 · DI')
-            ->id(self::TAB_DI)
-            ->label('Etapa 1 · DI — Identificación')
+            ->label(self::ETAPA_DI)
             ->icon('heroicon-o-clipboard-document-list')
             ->schema([
                 Section::make('Inventario de actividades')
                     ->columns(3)
                     ->schema([
+                        TextInput::make('anio_ciclo')
+                            ->label('Año del ciclo')
+                            ->numeric()
+                            ->required()
+                            ->default(now()->year)
+                            ->minValue(2000)
+                            ->maxValue(2100),
                         Select::make('contrato_id')
                             ->label('Contrato')
                             ->relationship('contrato', 'nombre', fn ($query) => $query->activos())
@@ -104,8 +112,7 @@ class ProcedimientoDoForm
                             ->required()
                             ->searchable()
                             ->disabled(fn (Get $get): bool => blank($get('contrato_id')))
-                            ->helperText('Seleccione primero el contrato')
-                            ->columnSpan(2),
+                            ->helperText('Seleccione primero el contrato'),
                         TextInput::make('nombre_actividad')
                             ->label('Nombre de la actividad')
                             ->required()
@@ -157,8 +164,7 @@ class ProcedimientoDoForm
     private static function etapaCa(): Tab
     {
         return Tab::make('Etapa 2 · CA')
-            ->id(self::TAB_CA)
-            ->label('Etapa 2 · CA — Estandarización')
+            ->label(self::ETAPA_CA)
             ->icon('heroicon-o-document-check')
             ->schema([
                 Section::make('Plazo de estandarización')
@@ -220,8 +226,7 @@ class ProcedimientoDoForm
     private static function etapaCo(): Tab
     {
         return Tab::make('Etapa 3 · CO')
-            ->id(self::TAB_CO)
-            ->label('Etapa 3 · CO — Comunicación')
+            ->label(self::ETAPA_CO)
             ->icon('heroicon-o-megaphone')
             ->schema([
                 Section::make('Divulgación del procedimiento')
@@ -257,8 +262,7 @@ class ProcedimientoDoForm
     private static function etapaCu(): Tab
     {
         return Tab::make('Etapa 4 · CU')
-            ->id(self::TAB_CU)
-            ->label('Etapa 4 · CU — Verificación')
+            ->label(self::ETAPA_CU)
             ->icon('heroicon-o-shield-check')
             ->schema([
                 Section::make('Programa de verificación')

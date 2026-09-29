@@ -53,7 +53,7 @@ class CreateProcedimientoDo extends CreateRecord
 
     public function crearYContinuar(): void
     {
-        $this->siguienteEtapa = ProcedimientoDoForm::TAB_CA;
+        $this->siguienteEtapa = ProcedimientoDoForm::idEtapa(ProcedimientoDoForm::ETAPA_CA);
 
         $this->create();
     }
