@@ -11,6 +11,7 @@ use BackedEnum;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -20,6 +21,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
@@ -55,6 +57,17 @@ class ContratoResource extends Resource
                         ->maxLength(191)
                         ->unique(ignoreRecord: true),
                     TextInput::make('nombre')->label('Nombre')->required()->maxLength(191),
+                    Select::make('zona')
+                        ->label('Zona')
+                        ->options(fn () => Contrato::query()
+                            ->whereNotNull('zona')
+                            ->distinct()
+                            ->orderBy('zona')
+                            ->pluck('zona', 'zona')
+                            ->all())
+                        ->searchable()
+                        ->native(false)
+                        ->helperText('Escriba para buscar o agregar una zona nueva'),
                     TextInput::make('cliente')->label('Cliente')->maxLength(191),
                     Toggle::make('activo')->label('Activo')->default(true),
                     Textarea::make('descripcion')->label('Descripción')->rows(3)->columnSpanFull(),
@@ -68,12 +81,21 @@ class ContratoResource extends Resource
             ->columns([
                 TextColumn::make('codigo')->label('Código')->searchable()->sortable(),
                 TextColumn::make('nombre')->label('Nombre')->searchable()->sortable(),
+                TextColumn::make('zona')->label('Zona')->badge()->searchable()->sortable(),
                 TextColumn::make('cliente')->label('Cliente')->searchable()->toggleable(),
                 TextColumn::make('campos_count')->label('Campos')->counts('campos'),
                 TextColumn::make('procedimientos_count')->label('Procedimientos')->counts('procedimientos'),
                 IconColumn::make('activo')->label('Activo')->boolean(),
             ])
             ->filters([
+                SelectFilter::make('zona')
+                    ->label('Zona')
+                    ->options(fn () => Contrato::query()
+                        ->whereNotNull('zona')
+                        ->distinct()
+                        ->orderBy('zona')
+                        ->pluck('zona', 'zona')
+                        ->all()),
                 TernaryFilter::make('activo')->label('Activo'),
             ])
             ->recordActions([

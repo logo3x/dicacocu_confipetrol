@@ -61,6 +61,7 @@ class CampoResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('contrato.zona')->label('Zona')->badge()->sortable()->toggleable(),
                 TextColumn::make('contrato.nombre')->label('Contrato')->searchable()->sortable(),
                 TextColumn::make('nombre')->label('Nombre')->searchable()->sortable(),
                 TextColumn::make('codigo')->label('Código')->searchable()->toggleable(),
