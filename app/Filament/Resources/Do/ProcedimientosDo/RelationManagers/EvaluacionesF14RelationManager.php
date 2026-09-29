@@ -62,12 +62,16 @@ class EvaluacionesF14RelationManager extends RelationManager
                         $data['created_by'] = auth()->id();
 
                         return $data;
-                    }),
+                    })
+                    ->after(fn () => $this->refrescarProcedimiento()),
             ])
             ->recordActions([
                 ViewAction::make()->modalWidth(Width::SevenExtraLarge),
-                EditAction::make()->modalWidth(Width::SevenExtraLarge),
-                DeleteAction::make(),
+                EditAction::make()
+                    ->modalWidth(Width::SevenExtraLarge)
+                    ->after(fn () => $this->refrescarProcedimiento()),
+                DeleteAction::make()
+                    ->after(fn () => $this->refrescarProcedimiento()),
             ])
             ->defaultSort('fecha_ejecucion', 'desc');
     }
@@ -75,5 +79,19 @@ class EvaluacionesF14RelationManager extends RelationManager
     public function isReadOnly(): bool
     {
         return false;
+    }
+
+    /**
+     * El observador de la evaluación recalcula el puntaje OPT, su criterio y la
+     * fecha ejecutada del procedimiento; sin esto el formulario de la etapa CU
+     * seguiría mostrando los valores previos hasta recargar la página.
+     */
+    private function refrescarProcedimiento(): void
+    {
+        $this->getOwnerRecord()->refresh();
+
+        // El relation manager es un componente Livewire aparte de la página que
+        // contiene el formulario, así que se avisa por evento.
+        $this->dispatch('procedimiento-actualizado');
     }
 }

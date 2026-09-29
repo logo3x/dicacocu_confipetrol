@@ -7,6 +7,7 @@ use App\Filament\Resources\Do\ProcedimientosDo\Schemas\ProcedimientoDoForm;
 use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
+use Livewire\Attributes\On;
 
 class EditProcedimientoDo extends EditRecord
 {
@@ -20,6 +21,19 @@ class EditProcedimientoDo extends EditRecord
         return [
             DeleteAction::make(),
         ];
+    }
+
+    /**
+     * Al registrar una evaluación F-14, el observador recalcula el puntaje OPT,
+     * su criterio y la fecha ejecutada; se recarga el formulario para mostrarlos
+     * sin necesidad de refrescar la página.
+     */
+    #[On('procedimiento-actualizado')]
+    public function recargarDatosCalculados(): void
+    {
+        $this->getRecord()->refresh();
+
+        $this->fillForm();
     }
 
     protected function getFormActions(): array

@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Do\ProcedimientosDo\Schemas;
 
 use App\Enums\Do\CriterioAmenaza;
+use App\Enums\Do\CriterioOpt;
 use App\Models\Do\Campo;
 use App\Models\User;
 use App\Services\Do\CalculadoraDo;
@@ -309,7 +310,12 @@ class ProcedimientoDoForm
                             ->label('Criterio de aprobación OPT')
                             ->disabled()
                             ->dehydrated(false)
-                            ->formatStateUsing(fn ($state) => $state?->label()),
+                            // Al recargar el formulario el estado puede llegar como texto.
+                            ->formatStateUsing(fn ($state) => match (true) {
+                                $state instanceof CriterioOpt => $state->label(),
+                                filled($state) => CriterioOpt::tryFrom($state)?->label(),
+                                default => null,
+                            }),
                     ])
                     ->visibleOn('edit'),
             ]);
