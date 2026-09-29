@@ -34,6 +34,8 @@ use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Str;
 use SocialiteProviders\Azure\AzureExtendSocialite;
 use SocialiteProviders\Manager\SocialiteWasCalled;
 
@@ -57,6 +59,12 @@ class AppServiceProvider extends AuthServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        // Tras un proxy, Laravel puede generar enlaces http:// aunque el sitio
+        // sea https://, y Azure rechaza el callback si el esquema no coincide.
+        if (Str::startsWith(config('app.url'), 'https://')) {
+            URL::forceScheme('https');
+        }
 
         $this->registerPolicies();
 

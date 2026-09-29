@@ -76,9 +76,15 @@ class AzureController extends Controller
     /** El botón solo se muestra cuando hay credenciales configuradas. */
     public static function estaConfigurado(): bool
     {
+        $tenant = config('services.azure.tenant');
+
+        // Sin un tenant propio Azure usaría "common", que admite cualquier
+        // cuenta de Microsoft y no solo el directorio de la organización.
         return filled(config('services.azure.client_id'))
             && filled(config('services.azure.client_secret'))
-            && filled(config('services.azure.redirect'));
+            && filled(config('services.azure.redirect'))
+            && filled($tenant)
+            && $tenant !== 'common';
     }
 
     private function dominioPermitido(string $correo): bool

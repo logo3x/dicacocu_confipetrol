@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\AzureController;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Contracts\User as UsuarioSocialite;
@@ -86,6 +87,32 @@ it('registra la fecha del último ingreso', function () {
     $this->get(route('auth.azure.callback'));
 
     expect(User::where('email', 'marca@confipetrol.com')->first()->last_login_at)->not->toBeNull();
+});
+
+it('se considera configurado solo con un tenant propio', function (?string $tenant, bool $esperado) {
+    config([
+        'services.azure.client_id' => 'id',
+        'services.azure.client_secret' => 'secreto',
+        'services.azure.redirect' => 'https://ejemplo.test/auth/azure/callback',
+        'services.azure.tenant' => $tenant,
+    ]);
+
+    expect(AzureController::estaConfigurado())->toBe($esperado);
+})->with([
+    'tenant de la organizacion' => ['641e2dc9-d106-45f6-bb66-c742d94c9104', true],
+    'common admite cualquier cuenta' => ['common', false],
+    'sin tenant' => [null, false],
+]);
+
+it('no se considera configurado si falta el secreto', function () {
+    config([
+        'services.azure.client_id' => 'id',
+        'services.azure.client_secret' => null,
+        'services.azure.redirect' => 'https://ejemplo.test/auth/azure/callback',
+        'services.azure.tenant' => 'un-tenant',
+    ]);
+
+    expect(AzureController::estaConfigurado())->toBeFalse();
 });
 
 it('normaliza el correo a minúsculas', function () {
