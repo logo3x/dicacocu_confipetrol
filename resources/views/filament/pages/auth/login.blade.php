@@ -344,6 +344,43 @@
         to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
+    /* ── Acceso con la cuenta institucional ── */
+    .sgd-azure-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .625rem;
+        width: 100%;
+        padding: .7rem 1rem;
+        margin-bottom: 1.25rem;
+        border: 1px solid #d0d5dd;
+        border-radius: .5rem;
+        background: #fff;
+        color: #1f2937;
+        font-size: .875rem;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color .15s ease, border-color .15s ease;
+    }
+    .sgd-azure-btn:hover { background: #f9fafb; border-color: #98a2b3; }
+    .sgd-azure-btn:focus-visible { outline: 2px solid #0050A0; outline-offset: 2px; }
+
+    .sgd-azure-sep {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        margin-bottom: 1.25rem;
+        color: #667085;
+        font-size: .75rem;
+    }
+    .sgd-azure-sep::before,
+    .sgd-azure-sep::after {
+        content: '';
+        flex: 1;
+        height: 1px;
+        background: #e4e7ec;
+    }
+
     @media (prefers-reduced-motion: reduce) {
         .sgd-login-visual::before, .sgd-login-visual::after { animation: none !important; }
         .sgd-visual-brand, .sgd-visual-message, .sgd-visual-pillars, .sgd-login-form-wrap {
@@ -385,6 +422,20 @@
                 <h2>Entre a su cuenta</h2>
                 <p>Sistema de Gestión Documental</p>
             </div>
+
+            @if (\App\Http\Controllers\Auth\AzureController::estaConfigurado())
+                <a href="{{ route('auth.azure') }}" class="sgd-azure-btn">
+                    <svg viewBox="0 0 21 21" width="18" height="18" aria-hidden="true">
+                        <rect x="1" y="1" width="9" height="9" fill="#f25022"/>
+                        <rect x="11" y="1" width="9" height="9" fill="#7fba00"/>
+                        <rect x="1" y="11" width="9" height="9" fill="#00a4ef"/>
+                        <rect x="11" y="11" width="9" height="9" fill="#ffb900"/>
+                    </svg>
+                    <span>Continuar con el correo institucional</span>
+                </a>
+
+                <div class="sgd-azure-sep"><span>o ingrese con su contraseña</span></div>
+            @endif
 
             {{ $this->content }}
         </div>

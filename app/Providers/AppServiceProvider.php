@@ -31,8 +31,11 @@ use App\Policies\DocumentoPolicy;
 use App\Policies\InspeccionGerencialAccionPolicy;
 use App\Policies\InspeccionGerencialReglaPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Schema;
+use SocialiteProviders\Azure\AzureExtendSocialite;
+use SocialiteProviders\Manager\SocialiteWasCalled;
 
 class AppServiceProvider extends AuthServiceProvider
 {
@@ -66,6 +69,9 @@ class AppServiceProvider extends AuthServiceProvider
 
         ProcedimientoDo::observe(ProcedimientoDoObserver::class);
         EvaluacionF14::observe(EvaluacionF14Observer::class);
+
+        // Proveedor de la comunidad: no se descubre solo, hay que registrarlo.
+        Event::listen(SocialiteWasCalled::class, [AzureExtendSocialite::class, 'handle']);
 
         // Superadmin omite todas las políticas
         Gate::before(function ($user, $ability) {

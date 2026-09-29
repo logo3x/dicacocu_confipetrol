@@ -14,6 +14,19 @@ return [
     |
     */
 
+    /*
+     * Inicio de sesión con la cuenta institucional (Microsoft Entra ID).
+     * El botón solo aparece cuando estas credenciales están configuradas.
+     */
+    'azure' => [
+        'client_id' => env('AZURE_CLIENT_ID'),
+        'client_secret' => env('AZURE_CLIENT_SECRET'),
+        'redirect' => env('AZURE_REDIRECT_URI'),
+        'tenant' => env('AZURE_TENANT_ID'),
+        'proxy' => env('PROXY'),
+        'dominio_permitido' => env('AZURE_DOMINIO_PERMITIDO', 'confipetrol.com'),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
