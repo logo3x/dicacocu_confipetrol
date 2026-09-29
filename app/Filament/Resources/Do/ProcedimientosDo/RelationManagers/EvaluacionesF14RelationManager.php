@@ -57,6 +57,7 @@ class EvaluacionesF14RelationManager extends RelationManager
                     ->icon('heroicon-o-plus')
                     ->modalHeading('Formato de Acompañamiento y Verificación de Actividades (F-14)')
                     ->modalWidth(Width::SevenExtraLarge)
+                    ->createAnother(false)
                     ->mutateDataUsing(function (array $data): array {
                         $data['created_by'] = auth()->id();
 

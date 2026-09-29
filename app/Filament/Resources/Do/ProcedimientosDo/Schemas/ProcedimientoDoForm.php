@@ -22,6 +22,29 @@ use Filament\Schemas\Schema;
 
 class ProcedimientoDoForm
 {
+    /** Identificadores de las pestañas, usados para abrir una etapa concreta desde la URL. */
+    public const TAB_DI = 'etapa-di';
+
+    public const TAB_CA = 'etapa-ca';
+
+    public const TAB_CO = 'etapa-co';
+
+    public const TAB_CU = 'etapa-cu';
+
+    /** Orden de las etapas, para avanzar a la siguiente al guardar. */
+    public const ORDEN_ETAPAS = [self::TAB_DI, self::TAB_CA, self::TAB_CO, self::TAB_CU];
+
+    public static function siguienteEtapa(?string $etapaActual): ?string
+    {
+        $indice = array_search($etapaActual ?? self::TAB_DI, self::ORDEN_ETAPAS, true);
+
+        if ($indice === false) {
+            return self::TAB_CA;
+        }
+
+        return self::ORDEN_ETAPAS[$indice + 1] ?? null;
+    }
+
     public static function configure(Schema $schema): Schema
     {
         return $schema->components([
@@ -52,6 +75,7 @@ class ProcedimientoDoForm
     private static function etapaDi(): Tab
     {
         return Tab::make('Etapa 1 · DI')
+            ->id(self::TAB_DI)
             ->label('Etapa 1 · DI — Identificación')
             ->icon('heroicon-o-clipboard-document-list')
             ->schema([
@@ -133,6 +157,7 @@ class ProcedimientoDoForm
     private static function etapaCa(): Tab
     {
         return Tab::make('Etapa 2 · CA')
+            ->id(self::TAB_CA)
             ->label('Etapa 2 · CA — Estandarización')
             ->icon('heroicon-o-document-check')
             ->schema([
@@ -195,6 +220,7 @@ class ProcedimientoDoForm
     private static function etapaCo(): Tab
     {
         return Tab::make('Etapa 3 · CO')
+            ->id(self::TAB_CO)
             ->label('Etapa 3 · CO — Comunicación')
             ->icon('heroicon-o-megaphone')
             ->schema([
@@ -231,6 +257,7 @@ class ProcedimientoDoForm
     private static function etapaCu(): Tab
     {
         return Tab::make('Etapa 4 · CU')
+            ->id(self::TAB_CU)
             ->label('Etapa 4 · CU — Verificación')
             ->icon('heroicon-o-shield-check')
             ->schema([
