@@ -2,7 +2,7 @@
     <div class="cp-container cp-footer__grid">
         <div class="cp-footer__brand">
             <img src="{{ asset('images/confipetrol-logo-white.png') }}" alt="Confipetrol" height="36">
-            <p>Sistema de Gestión Documental alineado al ciclo operacional DICACOCU de Ecopetrol S.A.</p>
+            <p>Sistema de Gestión Documental y Disciplina Operativa de Confipetrol.</p>
             <div class="cp-footer__social">
                 <a href="https://www.linkedin.com/company/confipetrol" aria-label="LinkedIn" target="_blank" rel="noopener">
                     <i class="fa-brands fa-linkedin-in"></i>
@@ -16,8 +16,8 @@
         <div class="cp-footer__col">
             <div class="cp-footer__heading">Sistema</div>
             <a href="{{ route('landing') }}">Inicio</a>
-            <a href="{{ route('landing.sgd') }}">¿Qué es el SGD?</a>
-            <a href="{{ route('landing.dicacocu') }}">Ciclo DICACOCU</a>
+            <a href="{{ route('landing') }}#sistema">El sistema</a>
+            <a href="{{ route('landing') }}#dicacocu">Ciclo DICACOCU</a>
             <a href="{{ route('filament.admin.auth.login') }}">Acceder al sistema</a>
         </div>
 

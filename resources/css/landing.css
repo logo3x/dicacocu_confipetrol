@@ -1,0 +1,381 @@
+/* ============================================================
+   PÁGINA PÚBLICA — SGD DICACOCU
+   Sigue el sistema de diseño de Confipetrol: jerarquía por
+   tipografía y espacio, sin adornos ni movimiento decorativo.
+   ============================================================ */
+
+/* El encabezado es fijo: los enlaces internos dejan aire bajo él. */
+.cp-portada,
+.cp-seccion,
+.cp-acceso {
+  scroll-margin-top: 7rem;
+}
+
+/* ---- Botones ---- */
+.cp-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-md);
+  line-height: 1;
+  padding: 0.75rem 1.25rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-out),
+              border-color var(--dur-fast) var(--ease-out),
+              color var(--dur-fast) var(--ease-out);
+}
+
+.cp-btn--lg { padding: 0.875rem 1.75rem; }
+
+.cp-btn--accent {
+  background: var(--color-accent);
+  color: var(--cp-white);
+}
+.cp-btn--accent:hover {
+  background: var(--cp-orange-600);
+  color: var(--cp-white);
+}
+.cp-btn--accent:active { transform: translateY(1px); }
+
+.cp-btn--ghost {
+  background: transparent;
+  border-color: var(--cp-gray-300);
+  color: var(--cp-gray-700);
+}
+.cp-btn--ghost:hover {
+  background: var(--cp-blue-50);
+  border-color: var(--cp-blue-200);
+  color: var(--cp-blue-700);
+}
+
+/* ---- Portada ---- */
+.cp-portada {
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+  border-bottom: 1px solid var(--cp-gray-200);
+  background: var(--cp-white);
+}
+
+.cp-portada__inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 5rem);
+  align-items: start;
+}
+
+.cp-portada__titulo {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: clamp(2rem, 4.2vw, 3.25rem);
+  line-height: 1.12;
+  letter-spacing: -0.02em;
+  color: var(--cp-blue-900);
+  margin-block: var(--space-6) var(--space-5);
+  max-width: 20ch;
+}
+
+.cp-portada__desc {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--cp-gray-600);
+  max-width: 58ch;
+}
+
+.cp-portada__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-7);
+}
+
+/* ---- Resumen de cifras ---- */
+.cp-portada__resumen {
+  border: 1px solid var(--cp-gray-200);
+  border-top: 3px solid var(--color-accent);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  background: var(--cp-gray-50);
+}
+
+.cp-resumen__titulo {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-sm);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cp-gray-500);
+  margin-bottom: var(--space-5);
+}
+
+.cp-resumen__lista { display: grid; gap: var(--space-4); }
+
+.cp-resumen__item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--cp-gray-200);
+}
+.cp-resumen__item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+.cp-resumen__item dt {
+  font-size: var(--fs-sm);
+  color: var(--cp-gray-600);
+  line-height: 1.4;
+}
+
+.cp-resumen__item dd {
+  font-family: var(--font-mono);
+  font-size: var(--fs-2xl);
+  font-weight: 500;
+  color: var(--cp-blue-700);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.cp-resumen__nota {
+  margin-top: var(--space-5);
+  font-size: var(--fs-xs);
+  color: var(--cp-gray-400);
+}
+
+/* ---- Secciones ---- */
+.cp-seccion { padding-block: clamp(3.5rem, 7vw, 6rem); }
+.cp-seccion--alterna {
+  background: var(--cp-gray-50);
+  border-block: 1px solid var(--cp-gray-200);
+}
+
+.cp-seccion__encabezado { max-width: 62ch; margin-bottom: clamp(2.5rem, 5vw, 3.5rem); }
+
+.cp-seccion__titulo {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: clamp(1.625rem, 3vw, 2.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  color: var(--cp-blue-900);
+  margin-block: var(--space-5) var(--space-4);
+}
+
+.cp-seccion__intro {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--cp-gray-600);
+}
+
+/* ---- Etapas del ciclo ---- */
+.cp-etapas {
+  display: grid;
+  /* Dos por fila: cuatro columnas dejarían el texto demasiado estrecho. */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--cp-gray-200);
+  border: 1px solid var(--cp-gray-200);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  counter-reset: etapa;
+}
+
+.cp-etapa {
+  background: var(--cp-white);
+  padding: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.cp-etapa__marca {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--cp-gray-100);
+}
+
+.cp-etapa__numero {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  color: var(--cp-gray-400);
+}
+
+.cp-etapa__sigla {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extra);
+  font-size: var(--fs-2xl);
+  letter-spacing: -0.01em;
+  color: var(--color-accent);
+}
+
+.cp-etapa__nombre {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cp-gray-500);
+  margin-bottom: var(--space-2);
+}
+
+.cp-etapa__titulo {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-lg);
+  line-height: 1.3;
+  color: var(--cp-blue-800);
+  margin-bottom: var(--space-3);
+}
+
+.cp-etapa__texto {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--cp-gray-600);
+}
+
+/* ---- El sistema ---- */
+.cp-sistema {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: clamp(2.5rem, 6vw, 4.5rem);
+  align-items: start;
+}
+
+.cp-sistema__desc {
+  font-size: var(--fs-lg);
+  line-height: 1.65;
+  color: var(--cp-gray-600);
+  margin-bottom: var(--space-6);
+}
+
+.cp-lista { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--space-5); }
+
+.cp-lista li {
+  position: relative;
+  padding-left: var(--space-6);
+  font-size: var(--fs-md);
+  line-height: 1.6;
+  color: var(--cp-gray-600);
+}
+
+.cp-lista li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.6em;
+  width: 8px;
+  height: 2px;
+  background: var(--color-accent);
+}
+
+.cp-lista strong {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  color: var(--cp-blue-800);
+  margin-bottom: var(--space-1);
+}
+
+/* ---- Formatos oficiales ---- */
+.cp-sistema__formatos { display: grid; gap: var(--space-5); }
+
+.cp-formato {
+  background: var(--cp-white);
+  border: 1px solid var(--cp-gray-200);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+}
+
+.cp-formato__codigo {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  color: var(--color-accent);
+  margin-bottom: var(--space-3);
+}
+
+.cp-formato__nombre {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-md);
+  line-height: 1.35;
+  color: var(--cp-blue-800);
+  margin-bottom: var(--space-3);
+}
+
+.cp-formato__texto {
+  font-size: var(--fs-sm);
+  line-height: 1.6;
+  color: var(--cp-gray-600);
+}
+
+/* ---- Acceso ---- */
+.cp-acceso {
+  padding-block: clamp(3rem, 6vw, 4.5rem);
+  background: var(--cp-blue-800);
+}
+
+.cp-acceso__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.cp-eyebrow--claro { color: var(--cp-orange-300); }
+
+.cp-acceso__titulo {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: clamp(1.5rem, 2.6vw, 2rem);
+  line-height: 1.25;
+  color: var(--cp-white);
+  margin-block: var(--space-5) var(--space-4);
+}
+
+.cp-acceso__desc {
+  font-size: var(--fs-md);
+  line-height: 1.65;
+  color: var(--cp-blue-100);
+  max-width: 54ch;
+}
+
+.cp-acceso__accion { display: grid; gap: var(--space-3); justify-items: start; }
+
+.cp-acceso__nota {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--cp-blue-200);
+}
+
+/* ---- Adaptación a pantallas pequeñas ---- */
+@media (max-width: 900px) {
+  .cp-portada__inner,
+  .cp-sistema {
+    grid-template-columns: 1fr;
+  }
+
+  .cp-portada__titulo { max-width: none; }
+}
+
+@media (max-width: 620px) {
+  .cp-etapas { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 560px) {
+  .cp-portada__acciones .cp-btn { width: 100%; }
+  .cp-acceso__accion { justify-items: stretch; width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cp-btn { transition: none; }
+}

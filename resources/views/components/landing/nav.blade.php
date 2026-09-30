@@ -20,10 +20,10 @@
         </a>
 
         <nav class="cp-nav__links" role="navigation" aria-label="Menú principal">
-            <a href="{{ route('landing') }}" class="cp-nav__link {{ request()->routeIs('landing') ? 'cp-nav__link--active' : '' }}">Inicio</a>
-            <a href="{{ route('landing.sgd') }}" class="cp-nav__link {{ request()->routeIs('landing.sgd') ? 'cp-nav__link--active' : '' }}">Sistema SGD</a>
-            <a href="{{ route('landing.dicacocu') }}" class="cp-nav__link {{ request()->routeIs('landing.dicacocu') ? 'cp-nav__link--active' : '' }}">DICACOCU</a>
-            <a href="{{ route('landing.contacto') }}" class="cp-nav__link {{ request()->routeIs('landing.contacto') ? 'cp-nav__link--active' : '' }}">Contacto</a>
+            <a href="{{ route('landing') }}#inicio" class="cp-nav__link">Inicio</a>
+            <a href="{{ route('landing') }}#dicacocu" class="cp-nav__link">Ciclo DICACOCU</a>
+            <a href="{{ route('landing') }}#sistema" class="cp-nav__link">El sistema</a>
+            <a href="{{ route('landing') }}#contacto" class="cp-nav__link">Acceso</a>
         </nav>
 
         <div class="cp-nav__actions">
