@@ -22,16 +22,16 @@ return Application::configure(basePath: dirname(__DIR__))
             fn (Request $request) => $request->is('api/*'),
         );
 
-        // Quien entra sin permisos veria un 403 sin explicacion; se le devuelve
-        // al acceso con el motivo y se cierra la sesion a medias.
+        // Quien llega al panel sin permisos veria un 403 sin explicacion; se le
+        // devuelve al acceso con el motivo.
         $exceptions->render(function (HttpException $e, Request $request) {
             if ($e->getStatusCode() !== 403 || ! $request->is('admin*') || $request->expectsJson()) {
                 return null;
             }
 
+            // Solo cierra la sesion de quien habia entrado: invalidarla por
+            // completo borraria el token del formulario de acceso.
             Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
 
             return redirect()
                 ->route('filament.admin.auth.login')
