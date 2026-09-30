@@ -6,6 +6,7 @@ use App\Filament\Resources\Do\ProcedimientosDo\Pages\CreateProcedimientoDo;
 use App\Filament\Resources\Do\ProcedimientosDo\Pages\EditProcedimientoDo;
 use App\Filament\Resources\Do\ProcedimientosDo\Pages\ListProcedimientosDo;
 use App\Filament\Resources\Do\ProcedimientosDo\RelationManagers\EvaluacionesF14RelationManager;
+use App\Filament\Resources\Do\ProcedimientosDo\RelationManagers\HistorialRelationManager;
 use App\Filament\Resources\Do\ProcedimientosDo\Schemas\ProcedimientoDoForm;
 use App\Filament\Resources\Do\ProcedimientosDo\Tables\ProcedimientosDoTable;
 use App\Models\Do\ProcedimientoDo;
@@ -49,6 +50,7 @@ class ProcedimientoDoResource extends Resource
     {
         return [
             EvaluacionesF14RelationManager::class,
+            HistorialRelationManager::class,
         ];
     }
 
@@ -65,5 +67,21 @@ class ProcedimientoDoResource extends Resource
     {
         return parent::getRecordRouteBindingEloquentQuery()
             ->withoutGlobalScopes([SoftDeletingScope::class]);
+    }
+
+    /**
+     * El listado solo muestra los procedimientos del contrato del usuario; sin
+     * contrato asignado no ve ninguno.
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        $consulta = parent::getEloquentQuery();
+        $usuario = auth()->user();
+
+        if (! $usuario || $usuario->veTodosLosContratos()) {
+            return $consulta;
+        }
+
+        return $consulta->where('contrato_id', $usuario->contrato_id);
     }
 }

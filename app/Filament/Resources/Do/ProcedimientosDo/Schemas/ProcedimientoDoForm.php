@@ -93,7 +93,17 @@ class ProcedimientoDoForm
                             ->maxValue(2100),
                         Select::make('contrato_id')
                             ->label('Contrato')
-                            ->relationship('contrato', 'nombre', fn ($query) => $query->activos())
+                            // Quien no es administrador solo registra procedimientos de su contrato.
+                            ->relationship('contrato', 'nombre', function ($query) {
+                                $usuario = auth()->user();
+
+                                return $usuario?->veTodosLosContratos()
+                                    ? $query->activos()
+                                    : $query->activos()->whereKey($usuario?->contrato_id);
+                            })
+                            ->default(fn () => auth()->user()?->veTodosLosContratos()
+                                ? null
+                                : auth()->user()?->contrato_id)
                             ->required()
                             ->searchable()
                             ->preload()

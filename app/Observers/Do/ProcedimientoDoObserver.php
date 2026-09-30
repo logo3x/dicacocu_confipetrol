@@ -42,13 +42,59 @@ class ProcedimientoDoObserver
         );
     }
 
+    public function created(ProcedimientoDo $procedimiento): void
+    {
+        $this->registrar($procedimiento, 'created', 'Creó el procedimiento', [
+            'attributes' => array_intersect_key($procedimiento->getAttributes(), array_flip(ProcedimientoDo::CAMPOS_AUDITADOS)),
+        ]);
+    }
+
+    public function updated(ProcedimientoDo $procedimiento): void
+    {
+        $nuevos = array_intersect_key($procedimiento->getChanges(), array_flip(ProcedimientoDo::CAMPOS_AUDITADOS));
+
+        if (blank($nuevos)) {
+            return;
+        }
+
+        $this->registrar($procedimiento, 'updated', 'Editó el procedimiento', [
+            'attributes' => $nuevos,
+            'old' => array_intersect_key($procedimiento->getOriginal(), $nuevos),
+        ]);
+    }
+
+    public function deleted(ProcedimientoDo $procedimiento): void
+    {
+        $this->registrar($procedimiento, 'deleted', 'Eliminó el procedimiento', [
+            'old' => array_intersect_key($procedimiento->getOriginal(), array_flip(ProcedimientoDo::CAMPOS_AUDITADOS)),
+        ]);
+
+        Cache::forget('do_indicadores_procedimientos');
+    }
+
+    public function restored(ProcedimientoDo $procedimiento): void
+    {
+        $this->registrar($procedimiento, 'restored', 'Restauró el procedimiento', []);
+    }
+
     public function saved(ProcedimientoDo $procedimiento): void
     {
         Cache::forget('do_indicadores_procedimientos');
     }
 
-    public function deleted(ProcedimientoDo $procedimiento): void
+    /**
+     * Deja constancia de quién hizo el cambio y qué valores tomó cada campo,
+     * para que el historial sirva como evidencia de auditoría.
+     *
+     * @param  array<string, mixed>  $propiedades
+     */
+    private function registrar(ProcedimientoDo $procedimiento, string $evento, string $descripcion, array $propiedades): void
     {
-        Cache::forget('do_indicadores_procedimientos');
+        activity()
+            ->performedOn($procedimiento)
+            ->causedBy(auth()->user())
+            ->withProperties($propiedades)
+            ->event($evento)
+            ->log($descripcion);
     }
 }

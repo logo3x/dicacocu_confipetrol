@@ -2,12 +2,14 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Models\Do\Campo;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
-use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -39,28 +41,31 @@ class UserForm
                             ->placeholder('Dejar en blanco para no cambiar'),
                     ]),
 
-                Section::make('Información Laboral')
-                    ->columns(3)
+                Section::make('Asignación')
+                    ->description('El contrato determina qué procedimientos puede ver y editar el usuario.')
+                    ->columns(2)
                     ->schema([
-                        TextInput::make('cargo')
-                            ->label('Cargo')
-                            ->maxLength(191),
+                        Select::make('contrato_id')
+                            ->label('Contrato')
+                            ->relationship('contrato', 'nombre', fn ($query) => $query->activos())
+                            ->searchable()
+                            ->preload()
+                            ->live()
+                            ->afterStateUpdated(fn (Set $set) => $set('campo_id', null)),
 
-                        TextInput::make('area')
-                            ->label('Área')
-                            ->maxLength(191),
-
-                        Select::make('sede')
-                            ->label('Sede')
-                            ->options([
-                                'Bogotá'        => 'Bogotá, Colombia',
-                                'Lima'          => 'Lima, Perú',
-                                'Santiago'      => 'Santiago, Chile',
-                                'Cochabamba'    => 'Cochabamba, Bolivia',
-                                'Quito'         => 'Quito, Ecuador',
-                                'Caracas'       => 'Caracas, Venezuela',
-                            ])
-                            ->searchable(),
+                        Select::make('campo_id')
+                            ->label('Campo')
+                            ->options(fn (Get $get) => $get('contrato_id')
+                                ? Campo::query()
+                                    ->activos()
+                                    ->where('contrato_id', $get('contrato_id'))
+                                    ->orderBy('nombre')
+                                    ->pluck('nombre', 'id')
+                                    ->all()
+                                : [])
+                            ->searchable()
+                            ->disabled(fn (Get $get): bool => blank($get('contrato_id')))
+                            ->helperText('Seleccione primero el contrato'),
                     ]),
 
                 Section::make('Acceso y Rol')

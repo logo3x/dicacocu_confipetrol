@@ -17,12 +17,16 @@ class UsersTable
             ->columns([
                 TextColumn::make('name')
                     ->searchable(),
-                TextColumn::make('cargo')
-                    ->searchable(),
-                TextColumn::make('area')
-                    ->searchable(),
-                TextColumn::make('sede')
-                    ->searchable(),
+                TextColumn::make('contrato.nombre')
+                    ->label('Contrato')
+                    ->placeholder('Sin asignar')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('campo.nombre')
+                    ->label('Campo')
+                    ->placeholder('Sin asignar')
+                    ->searchable()
+                    ->toggleable(),
                 IconColumn::make('is_active')
                     ->boolean(),
                 TextColumn::make('last_login_at')

@@ -1,5 +1,7 @@
 <?php
 
+use App\Filament\Pages\SeleccionarContrato;
+use App\Models\Do\Campo;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Spatie\Permission\Models\Permission;
@@ -64,7 +66,34 @@ test('usuario activo sin permiso no puede acceder al panel', function () {
 });
 
 test('usuario activo con permiso puede acceder al panel', function () {
-    $user = User::factory()->create(['is_active' => true]);
+    $campo = Campo::factory()->create();
+
+    $user = User::factory()->create([
+        'is_active' => true,
+        'contrato_id' => $campo->contrato_id,
+        'campo_id' => $campo->id,
+    ]);
+    $user->givePermissionTo('acceder panel admin');
+
+    $this->actingAs($user)
+        ->get('/admin')
+        ->assertSuccessful();
+});
+
+test('usuario sin contrato asignado debe indicarlo antes de usar el panel', function () {
+    $user = User::factory()->create(['is_active' => true, 'contrato_id' => null]);
+    $user->givePermissionTo('acceder panel admin');
+
+    $this->actingAs($user)
+        ->get('/admin')
+        ->assertRedirect(SeleccionarContrato::getUrl(panel: 'admin'));
+});
+
+test('el administrador entra sin necesidad de contrato', function () {
+    Role::findOrCreate('admin', 'web');
+
+    $user = User::factory()->create(['is_active' => true, 'contrato_id' => null]);
+    $user->assignRole('admin');
     $user->givePermissionTo('acceder panel admin');
 
     $this->actingAs($user)

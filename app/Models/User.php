@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Do\Campo;
+use App\Models\Do\Contrato;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -18,9 +21,8 @@ class User extends Authenticatable implements FilamentUser
 
     protected $fillable = [
         'name',
-        'cargo',
-        'area',
-        'sede',
+        'contrato_id',
+        'campo_id',
         'email',
         'password',
         'is_active',
@@ -37,9 +39,9 @@ class User extends Authenticatable implements FilamentUser
     {
         return [
             'email_verified_at' => 'datetime',
-            'last_login_at'     => 'datetime',
-            'password'          => 'hashed',
-            'is_active'         => 'boolean',
+            'last_login_at' => 'datetime',
+            'password' => 'hashed',
+            'is_active' => 'boolean',
         ];
     }
 
@@ -76,5 +78,26 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->is_active && $this->hasPermissionTo('acceder panel admin');
+    }
+
+    /** @return BelongsTo<Contrato, $this> */
+    public function contrato(): BelongsTo
+    {
+        return $this->belongsTo(Contrato::class, 'contrato_id');
+    }
+
+    /** @return BelongsTo<Campo, $this> */
+    public function campo(): BelongsTo
+    {
+        return $this->belongsTo(Campo::class, 'campo_id');
+    }
+
+    /**
+     * Los administradores supervisan todo el ciclo; el resto solo trabaja sobre
+     * los procedimientos del contrato al que pertenece.
+     */
+    public function veTodosLosContratos(): bool
+    {
+        return $this->hasAnyRole(['super_admin', 'admin']);
     }
 }

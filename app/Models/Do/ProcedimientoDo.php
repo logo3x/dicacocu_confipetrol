@@ -10,7 +10,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Models\Activity;
 
 /**
  * Procedimiento de la Matriz Integral de Disciplina Operativa (DICACOCU).
@@ -22,7 +24,34 @@ class ProcedimientoDo extends Model
 
     protected $table = 'do_procedimientos';
 
-    protected $guarded = [];
+    /**
+     * Declarados explícitamente porque el historial de cambios se construye a
+     * partir de ellos.
+     *
+     * @var list<string>
+     */
+    protected $fillable = [
+        ...self::CAMPOS_AUDITADOS,
+        'created_by',
+        'plazo_estandarizacion_meses',
+        'fecha_limite_estandarizacion',
+        'frecuencia_verificacion_meses',
+    ];
+
+    /** Campos cuyo cambio queda registrado en el historial. */
+    public const CAMPOS_AUDITADOS = [
+        'anio_ciclo', 'contrato_id', 'campo_id',
+        'nombre_actividad', 'fecha_identificacion', 'personas_involucradas',
+        'amenaza_riesgo_critico', 'amenaza_equipos_criticos', 'amenaza_impacto_ambiental',
+        'amenaza_antecedentes', 'amenaza_afecta_servicio', 'amenaza_no_rutinaria',
+        'puntaje_prioridad', 'prioridad',
+        'codificado', 'fecha_programada_codificacion', 'fecha_codificacion',
+        'responsable_codificacion_id', 'codigo_asignado', 'titulo_procedimiento',
+        'version_actual', 'ubicacion_acceso',
+        'fecha_ultima_divulgacion', 'personas_socializadas', 'cobertura_socializacion',
+        'responsable_area_id', 'fecha_programada_verificacion', 'fecha_ejecutada_verificacion',
+        'observador_operativo_id', 'observador_hseq_id', 'puntaje_opt', 'criterio_opt',
+    ];
 
     protected function casts(): array
     {
@@ -99,5 +128,18 @@ class ProcedimientoDo extends Model
     public function estaEstandarizado(): bool
     {
         return filled($this->codigo_asignado);
+    }
+
+    /**
+     * Historial de cambios del procedimiento.
+     *
+     * Lo alimenta ProcedimientoDoObserver, que registra explícitamente los
+     * valores anterior y nuevo de cada campo.
+     *
+     * @return MorphMany<Activity, $this>
+     */
+    public function historial(): MorphMany
+    {
+        return $this->morphMany(Activity::class, 'subject')->latest('id');
     }
 }

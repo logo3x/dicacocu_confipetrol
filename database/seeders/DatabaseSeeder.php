@@ -17,18 +17,12 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'superadmin@confipetrol.com',
                 'name' => 'Carlos Mendoza',
-                'cargo' => 'Administrador del Sistema',
-                'area' => 'Tecnología',
-                'sede' => 'Bogotá',
                 'password' => 'SuperAdmin@2026!',
                 'rol' => 'super_admin',
             ],
             [
                 'email' => 'admin@confipetrol.com',
                 'name' => 'Laura Rodríguez',
-                'cargo' => 'Coordinadora de Calidad',
-                'area' => 'Calidad y HSE',
-                'sede' => 'Bogotá',
                 'password' => 'Admin@2026!',
                 'rol' => 'admin',
                 'roles_do' => ['calidad_corporativa'],
@@ -36,9 +30,6 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'gestor@confipetrol.com',
                 'name' => 'Andrés Vargas',
-                'cargo' => 'Gestor Documental',
-                'area' => 'Calidad y HSE',
-                'sede' => 'Medellín',
                 'password' => 'Gestor@2026!',
                 'rol' => 'gestor_documental',
                 'roles_do' => ['responsable_hseq'],
@@ -46,9 +37,6 @@ class DatabaseSeeder extends Seeder
             [
                 'email' => 'operativo@confipetrol.com',
                 'name' => 'Juan Castaño',
-                'cargo' => 'Coordinador de Campo',
-                'area' => 'Operaciones',
-                'sede' => 'Barrancabermeja',
                 'password' => 'Operativo@2026!',
                 'rol' => 'operativo',
                 'roles_do' => ['lider_om', 'personal_tecnico'],
@@ -60,9 +48,6 @@ class DatabaseSeeder extends Seeder
                 ['email' => $datos['email']],
                 [
                     'name' => $datos['name'],
-                    'cargo' => $datos['cargo'],
-                    'area' => $datos['area'],
-                    'sede' => $datos['sede'],
                     'password' => Hash::make($datos['password']),
                     'email_verified_at' => now(),
                     'is_active' => true,
