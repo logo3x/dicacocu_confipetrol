@@ -36,7 +36,7 @@ class CompromisosDoSeeder extends Seeder
                 'descripcion' => 'Realizar inventario de actividades y priorizar según nivel de amenaza (HSEQ-GCA1-F-17 Matriz Integral de Disciplina Operativa).',
                 'fecha_limite' => '2026-07-31',
                 'responsable_id' => $operativo->id,
-                'rol_responsable' => 'lider_om',
+                'rol_responsable' => 'responsable_hseq',
                 'created_by' => $admin->id,
             ],
             [

@@ -15,7 +15,7 @@ beforeEach(function () {
 
     Role::firstOrCreate(['name' => 'super_admin', 'guard_name' => 'web']);
     Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
-    Role::firstOrCreate(['name' => 'gestor_documental', 'guard_name' => 'web']);
+    Role::firstOrCreate(['name' => 'responsable_hseq', 'guard_name' => 'web']);
     Permission::firstOrCreate(['name' => 'acceder panel admin', 'guard_name' => 'web']);
 });
 
@@ -69,7 +69,7 @@ test('admin puede ver documentos confidenciales', function () {
 
 test('gestor documental puede crear documentos', function () {
     $gestor = User::factory()->create(['is_active' => true]);
-    $gestor->assignRole('gestor_documental');
+    $gestor->assignRole('responsable_hseq');
     $policy = new DocumentoPolicy;
 
     expect($policy->create($gestor))->toBeTrue();

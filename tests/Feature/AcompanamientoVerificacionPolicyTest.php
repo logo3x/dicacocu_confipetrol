@@ -28,9 +28,9 @@ test('responsable_hseq puede crear un acompanamiento (evaluador hseq)', function
     expect($policy->create($user))->toBeTrue();
 });
 
-test('lider_om no puede crear un acompanamiento (no es evaluador)', function () {
+test('quien no es evaluador no puede crear un acompanamiento', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('lider_om');
+    $user->assignRole('calidad_corporativa');
     $policy = new AcompanamientoVerificacionPolicy;
 
     expect($policy->create($user))->toBeFalse();

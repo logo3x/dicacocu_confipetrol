@@ -32,7 +32,7 @@ class DocumentoPolicy
 
     public function create(User $user): bool
     {
-        return $user->is_active && $user->hasAnyRole(['super_admin', 'admin', 'gestor_documental']);
+        return $user->is_active && $user->hasAnyRole(['super_admin', 'admin', 'responsable_hseq']);
     }
 
     public function update(User $user, Documento $documento): bool

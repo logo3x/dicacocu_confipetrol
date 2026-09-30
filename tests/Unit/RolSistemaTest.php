@@ -6,8 +6,8 @@ it('traduce el identificador del rol a un nombre legible', function (string $ide
     expect(RolSistema::etiqueta($identificador))->toBe($esperado);
 })->with([
     ['super_admin', 'Superadministrador'],
-    ['gestor_documental', 'Gestor documental'],
-    ['lider_om', 'Líder O&M'],
+    ['admin', 'Administrador'],
+    ['calidad_corporativa', 'Calidad corporativa'],
     ['responsable_hseq', 'Responsable HSEQ'],
     ['personal_tecnico', 'Personal técnico'],
 ]);
@@ -27,9 +27,6 @@ it('cubre todos los roles que existen en el sistema', function () {
     expect($delSistema)->toBe([
         'admin',
         'calidad_corporativa',
-        'gestor_documental',
-        'lider_om',
-        'operativo',
         'personal_tecnico',
         'responsable_hseq',
         'super_admin',

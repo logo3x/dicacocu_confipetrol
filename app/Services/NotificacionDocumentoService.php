@@ -88,6 +88,6 @@ class NotificacionDocumentoService
 
     private static function getTodosLosGestores(): Collection
     {
-        return User::role(['gestor_documental', 'admin', 'super_admin'])->get();
+        return User::role(['responsable_hseq', 'admin', 'super_admin'])->get();
     }
 }

@@ -31,15 +31,13 @@ class DatabaseSeeder extends Seeder
                 'email' => 'gestor@confipetrol.com',
                 'name' => 'Andrés Vargas',
                 'password' => 'Gestor@2026!',
-                'rol' => 'gestor_documental',
-                'roles_do' => ['responsable_hseq'],
+                'rol' => 'responsable_hseq',
             ],
             [
                 'email' => 'operativo@confipetrol.com',
                 'name' => 'Juan Castaño',
                 'password' => 'Operativo@2026!',
-                'rol' => 'operativo',
-                'roles_do' => ['lider_om', 'personal_tecnico'],
+                'rol' => 'personal_tecnico',
             ],
         ];
 

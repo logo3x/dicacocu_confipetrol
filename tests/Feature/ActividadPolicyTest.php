@@ -21,9 +21,9 @@ test('personal_tecnico puede ver actividades pero no crearlas', function () {
         ->and($policy->create($user))->toBeFalse();
 });
 
-test('lider_om puede crear y editar actividades', function () {
+test('responsable_hseq puede crear y editar actividades', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('lider_om');
+    $user->assignRole('responsable_hseq');
     $policy = new ActividadPolicy;
     $actividad = Actividad::factory()->create();
 
@@ -88,7 +88,7 @@ test('solo super_admin puede eliminar permanentemente una actividad', function (
 
 test('un usuario puede combinar rol tecnico y rol de negocio de disciplina operativa', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole(['gestor_documental', 'responsable_hseq']);
+    $user->assignRole(['responsable_hseq', 'responsable_hseq']);
 
     expect($user->can('aprobar documentos'))->toBeTrue()
         ->and($user->can('evaluar actividad hseq'))->toBeTrue();

@@ -10,7 +10,7 @@ use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
-function usuarioDeContrato(?int $contratoId, string $rol = 'operativo'): User
+function usuarioDeContrato(?int $contratoId, string $rol = 'personal_tecnico'): User
 {
     foreach (['ver procedimientos do', 'editar procedimientos do', 'eliminar procedimientos do'] as $permiso) {
         Permission::findOrCreate($permiso, 'web');

@@ -46,9 +46,9 @@ test('un usuario que no es responsable ni tiene el permiso no puede actualizar e
     expect($policy->update($otro, $compromiso))->toBeFalse();
 });
 
-test('lider_om puede eliminar compromisos', function () {
+test('responsable_hseq puede eliminar compromisos', function () {
     $user = User::factory()->create(['is_active' => true]);
-    $user->assignRole('lider_om');
+    $user->assignRole('responsable_hseq');
     $compromiso = Compromiso::factory()->create();
     $policy = new CompromisoPolicy;
 

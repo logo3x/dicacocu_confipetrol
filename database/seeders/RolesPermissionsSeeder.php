@@ -88,31 +88,7 @@ class RolesPermissionsSeeder extends Seeder
             'gestionar capacitaciones do', 'gestionar compromisos do',
         ]);
 
-        // gestor_documental: opera el ciclo documental (crea, versiona, aprueba, divulga)
-        $gestor = Role::firstOrCreate(['name' => 'gestor_documental']);
-        $gestor->syncPermissions([
-            'ver documentos', 'crear documentos', 'editar documentos',
-            'aprobar documentos', 'divulgar documentos',
-            'ver carpetas', 'crear carpetas', 'editar carpetas',
-            'ver ciclos', 'crear ciclos', 'editar ciclos',
-            'ver reportes',
-            'acceder panel admin',
-        ]);
-
-        // operativo: coordinador de campo — lee procedimientos aprobados y registra ejecuciones
-        $operativo = Role::firstOrCreate(['name' => 'operativo']);
-        $operativo->syncPermissions([
-            'ver documentos',
-            'ver carpetas',
-            'ver ciclos',
-            'acceder panel admin',
-            'registrar ejecucion procedimiento',
-            'ver actividades',
-        ]);
-
         // ── Roles de negocio — Disciplina Operativa (Confipetrol) ──────────
-        // Un usuario puede combinar un rol técnico (admin, gestor_documental)
-        // con uno o más roles de negocio de DO.
 
         // calidad_corporativa: capacitaciones, seguimiento de implementación, consolidación de indicadores
         $calidadCorporativa = Role::firstOrCreate(['name' => 'calidad_corporativa']);
@@ -133,26 +109,22 @@ class RolesPermissionsSeeder extends Seeder
             'acceder panel admin',
         ]);
 
-        // lider_om: coordinador/supervisor de contrato — asegura implementación y logística
-        $liderOm = Role::firstOrCreate(['name' => 'lider_om']);
-        $liderOm->syncPermissions([
-            'ver actividades',
-            'crear actividades',
-            'editar actividades',
-            'ver documentos',
-            'ver ciclos',
-            'ver reportes',
-            'gestionar compromisos do',
-            'acceder panel admin',
-        ]);
-
-        // responsable_hseq: responsable HSEQ del contrato — gestión documental, riesgos, evaluador HSEQ en F-14
+        // responsable_hseq: responsable HSEQ del contrato — gestión documental,
+        // riesgos y evaluador HSEQ en el F-14. Absorbe al antiguo gestor
+        // documental y al líder O&M, que hacían lo mismo sobre el módulo nuevo.
         $responsableHseq = Role::firstOrCreate(['name' => 'responsable_hseq']);
         $responsableHseq->syncPermissions([
             'ver actividades',
             'crear actividades',
             'editar actividades',
             'valorar amenaza actividad',
+            'ver carpetas',
+            'crear carpetas',
+            'editar carpetas',
+            'crear ciclos',
+            'editar ciclos',
+            'divulgar documentos',
+            'gestionar compromisos do',
             'ver documentos',
             'crear documentos',
             'editar documentos',
@@ -164,11 +136,14 @@ class RolesPermissionsSeeder extends Seeder
             'acceder panel admin',
         ]);
 
-        // personal_tecnico: aplica procedimientos y participa en verificaciones como evaluador operativo
+        // personal_tecnico: aplica procedimientos y participa en verificaciones
+        // como evaluador operativo. Absorbe al antiguo rol operativo.
         $personalTecnico = Role::firstOrCreate(['name' => 'personal_tecnico']);
         $personalTecnico->syncPermissions([
             'ver actividades',
             'ver documentos',
+            'ver carpetas',
+            'ver ciclos',
             'registrar ejecucion procedimiento',
             'evaluar actividad operativo',
             'detener actividad por riesgo critico',

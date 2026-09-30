@@ -39,15 +39,6 @@ class DoPermissionsSeeder extends Seeder
             $admin->givePermissionTo($permisos);
         }
 
-        if ($gestor = Role::where('name', 'gestor_documental')->first()) {
-            $gestor->givePermissionTo([
-                'ver procedimientos do',
-                'crear procedimientos do',
-                'editar procedimientos do',
-                'evaluar f14',
-            ]);
-        }
-
         if ($hseq = Role::where('name', 'responsable_hseq')->first()) {
             $hseq->givePermissionTo([
                 'ver procedimientos do',
@@ -58,16 +49,8 @@ class DoPermissionsSeeder extends Seeder
             ]);
         }
 
-        if ($operativo = Role::where('name', 'operativo')->first()) {
-            $operativo->givePermissionTo(['ver procedimientos do']);
-        }
-
         if ($tecnico = Role::where('name', 'personal_tecnico')->first()) {
             $tecnico->givePermissionTo(['ver procedimientos do', 'evaluar f14']);
-        }
-
-        if ($lider = Role::where('name', 'lider_om')->first()) {
-            $lider->givePermissionTo(['ver procedimientos do', 'crear procedimientos do', 'editar procedimientos do']);
         }
 
         if ($calidad = Role::where('name', 'calidad_corporativa')->first()) {
