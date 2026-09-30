@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Tables;
 
+use App\Enums\RolSistema;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -16,7 +17,17 @@ class UsersTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Nombre')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('email')
+                    ->label('Correo electrónico')
                     ->searchable(),
+                TextColumn::make('roles.name')
+                    ->label('Rol')
+                    ->badge()
+                    ->formatStateUsing(fn (string $state): string => RolSistema::etiqueta($state))
+                    ->placeholder('Sin rol'),
                 TextColumn::make('contrato.nombre')
                     ->label('Contrato')
                     ->placeholder('Sin asignar')
@@ -28,24 +39,27 @@ class UsersTable
                     ->searchable()
                     ->toggleable(),
                 IconColumn::make('is_active')
+                    ->label('Activo')
                     ->boolean(),
                 TextColumn::make('last_login_at')
-                    ->dateTime()
+                    ->label('Último ingreso')
+                    ->dateTime('d/m/Y H:i')
+                    ->placeholder('Nunca')
                     ->sortable(),
-                TextColumn::make('avatar_url')
-                    ->searchable(),
-                TextColumn::make('email')
-                    ->label('Email address')
-                    ->searchable(),
                 TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
+                    ->label('Correo verificado')
+                    ->dateTime('d/m/Y H:i')
+                    ->placeholder('Sin verificar')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Creado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Actualizado')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

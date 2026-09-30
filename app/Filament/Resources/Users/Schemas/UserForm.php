@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Enums\RolSistema;
 use App\Models\Do\Campo;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -10,6 +11,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Spatie\Permission\Models\Role;
 
 class UserForm
 {
@@ -74,6 +76,7 @@ class UserForm
                         Select::make('roles')
                             ->label('Rol')
                             ->relationship('roles', 'name')
+                            ->getOptionLabelFromRecordUsing(fn (Role $rol): string => RolSistema::etiqueta($rol->name))
                             ->multiple()
                             ->preload()
                             ->searchable(),

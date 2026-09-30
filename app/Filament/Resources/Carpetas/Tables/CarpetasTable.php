@@ -19,33 +19,41 @@ class CarpetasTable
         return $table
             ->columns([
                 TextColumn::make('nombre')
-                    ->searchable(),
-                TextColumn::make('codigo')
-                    ->searchable(),
-                TextColumn::make('parent.id')
-                    ->searchable(),
-                TextColumn::make('created_by')
-                    ->numeric()
+                    ->label('Nombre')
+                    ->searchable()
                     ->sortable(),
-                TextColumn::make('color')
+                TextColumn::make('codigo')
+                    ->label('Código')
                     ->searchable(),
-                TextColumn::make('icono')
+                TextColumn::make('parent.nombre')
+                    ->label('Carpeta superior')
+                    ->placeholder('Raíz')
                     ->searchable(),
+                TextColumn::make('creador.name')
+                    ->label('Creada por')
+                    ->placeholder('—')
+                    ->toggleable(),
                 IconColumn::make('is_public')
+                    ->label('Pública')
                     ->boolean(),
                 TextColumn::make('orden')
+                    ->label('Orden')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(),
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Creada')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Actualizada')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('deleted_at')
-                    ->dateTime()
+                    ->label('Eliminada')
+                    ->dateTime('d/m/Y H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
