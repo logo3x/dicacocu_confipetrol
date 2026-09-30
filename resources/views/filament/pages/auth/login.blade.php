@@ -344,6 +344,23 @@
         to   { opacity: 1; transform: scale(1) translateY(0); }
     }
 
+    /* ── Aviso de acceso ── */
+    .sgd-aviso {
+        display: flex;
+        align-items: flex-start;
+        gap: .625rem;
+        padding: .75rem .875rem;
+        margin-bottom: 1.25rem;
+        border: 1px solid #fcd9b6;
+        border-left: 3px solid #f58a1f;
+        border-radius: .5rem;
+        background: #fff8ef;
+        color: #7a4a12;
+        font-size: .8125rem;
+        line-height: 1.5;
+    }
+    .sgd-aviso i { margin-top: .125rem; color: #f58a1f; }
+
     /* ── Acceso con la cuenta institucional ── */
     .sgd-azure-btn {
         display: flex;
@@ -422,6 +439,13 @@
                 <h2>Entre a su cuenta</h2>
                 <p>Sistema de Gestión Documental</p>
             </div>
+
+            @if ($errors->has('email'))
+                <div class="sgd-aviso" role="alert">
+                    <i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>
+                    <span>{{ $errors->first('email') }}</span>
+                </div>
+            @endif
 
             @if (\App\Http\Controllers\Auth\AzureController::estaConfigurado())
                 <a href="{{ route('auth.azure') }}" class="sgd-azure-btn">

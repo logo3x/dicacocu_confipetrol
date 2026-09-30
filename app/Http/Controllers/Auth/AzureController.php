@@ -68,6 +68,15 @@ class AzureController extends Controller
 
         $usuario->save();
 
+        // Quien entra por primera vez todavía no tiene rol: sin esto Filament
+        // respondería con un 403 sin explicar qué hacer.
+        if (! $usuario->canAccessPanel(Filament::getPanel('admin'))) {
+            return $this->rechazar(
+                'Su cuenta quedó registrada, pero aún no tiene permisos asignados. '
+                .'Solicite al administrador que le asigne un rol para ingresar.'
+            );
+        }
+
         Auth::login($usuario, remember: true);
 
         return redirect()->intended(Filament::getPanel('admin')->getUrl());

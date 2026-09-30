@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Permission\Exceptions\PermissionDoesNotExist;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
@@ -77,7 +78,17 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return $this->is_active && $this->hasPermissionTo('acceder panel admin');
+        if (! $this->is_active) {
+            return false;
+        }
+
+        try {
+            return $this->hasPermissionTo('acceder panel admin');
+        } catch (PermissionDoesNotExist) {
+            // El permiso puede no existir tras un despliegue sin sembrar:
+            // se niega el acceso en lugar de romper la aplicación.
+            return false;
+        }
     }
 
     /** @return BelongsTo<Contrato, $this> */

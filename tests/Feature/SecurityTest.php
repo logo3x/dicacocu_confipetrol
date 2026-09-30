@@ -54,7 +54,8 @@ test('usuario inactivo no puede acceder al panel', function () {
 
     $this->actingAs($user)
         ->get('/admin')
-        ->assertForbidden();
+        ->assertRedirect(route('filament.admin.auth.login'))
+        ->assertSessionHasErrors('email');
 });
 
 test('usuario activo sin permiso no puede acceder al panel', function () {
@@ -62,7 +63,8 @@ test('usuario activo sin permiso no puede acceder al panel', function () {
 
     $this->actingAs($user)
         ->get('/admin')
-        ->assertForbidden();
+        ->assertRedirect(route('filament.admin.auth.login'))
+        ->assertSessionHasErrors('email');
 });
 
 test('usuario activo con permiso puede acceder al panel', function () {

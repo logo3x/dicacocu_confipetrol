@@ -5,6 +5,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Socialite\Contracts\User as UsuarioSocialite;
 use Laravel\Socialite\Facades\Socialite;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 uses(RefreshDatabase::class);
 
@@ -26,19 +28,36 @@ function simularAzure(UsuarioSocialite $cuenta): void
     Socialite::shouldReceive('driver')->with('azure')->andReturn($driver);
 }
 
+/** Rol mínimo para poder entrar al panel. */
+function rolConAcceso(): Role
+{
+    Permission::findOrCreate('acceder panel admin', 'web');
+
+    return Role::findOrCreate('personal_tecnico', 'web')
+        ->givePermissionTo('acceder panel admin');
+}
+
 it('crea el usuario cuando entra por primera vez con su correo institucional', function () {
     simularAzure(cuentaAzure('nuevo@confipetrol.com', 'Ana Gómez'));
 
-    $this->get(route('auth.azure.callback'))
-        ->assertRedirect();
+    $this->get(route('auth.azure.callback'))->assertRedirect();
 
     $usuario = User::where('email', 'nuevo@confipetrol.com')->first();
 
     expect($usuario)->not->toBeNull()
         ->and($usuario->name)->toBe('Ana Gómez')
         ->and($usuario->is_active)->toBeTrue();
+});
 
-    $this->assertAuthenticatedAs($usuario);
+it('autentica a quien ya tiene permisos', function () {
+    $usuario = User::factory()->create(['email' => 'conrol@confipetrol.com', 'is_active' => true]);
+    $usuario->assignRole(rolConAcceso());
+
+    simularAzure(cuentaAzure('conrol@confipetrol.com'));
+
+    $this->get(route('auth.azure.callback'));
+
+    $this->assertAuthenticatedAs($usuario->fresh());
 });
 
 it('reutiliza el usuario existente en lugar de duplicarlo', function () {
@@ -46,6 +65,7 @@ it('reutiliza el usuario existente en lugar de duplicarlo', function () {
         'email' => 'gestor@confipetrol.com',
         'is_active' => true,
     ]);
+    $existente->assignRole(rolConAcceso());
 
     simularAzure(cuentaAzure('gestor@confipetrol.com'));
 
@@ -54,6 +74,30 @@ it('reutiliza el usuario existente en lugar de duplicarlo', function () {
     expect(User::where('email', 'gestor@confipetrol.com')->count())->toBe(1);
 
     $this->assertAuthenticatedAs($existente->fresh());
+});
+
+it('explica al usuario sin rol por qué no puede entrar', function () {
+    simularAzure(cuentaAzure('sinrol@confipetrol.com', 'Sin Rol'));
+
+    $this->get(route('auth.azure.callback'))
+        ->assertRedirect(route('filament.admin.auth.login'))
+        ->assertSessionHasErrors('email');
+
+    // La cuenta queda creada para que el administrador solo tenga que darle un rol.
+    expect(User::where('email', 'sinrol@confipetrol.com')->exists())->toBeTrue();
+
+    $this->assertGuest();
+});
+
+it('devuelve al acceso con un aviso en lugar de una pantalla de error', function () {
+    $sinPermisos = User::factory()->create(['is_active' => true]);
+
+    $this->actingAs($sinPermisos)
+        ->get('/admin')
+        ->assertRedirect(route('filament.admin.auth.login'))
+        ->assertSessionHasErrors('email');
+
+    $this->assertGuest();
 });
 
 it('rechaza correos de otros dominios', function () {
