@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Do\ProcedimientoDo;
 use Database\Factories\DocumentoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -65,6 +66,16 @@ class Documento extends Model implements HasMedia
     public function carpeta(): BelongsTo
     {
         return $this->belongsTo(Carpeta::class);
+    }
+
+    /**
+     * Procedimientos de la matriz DICACOCU que apuntan a este documento.
+     *
+     * @return HasMany<ProcedimientoDo, $this>
+     */
+    public function procedimientosDo(): HasMany
+    {
+        return $this->hasMany(ProcedimientoDo::class, 'documento_id');
     }
 
     public function creador(): BelongsTo

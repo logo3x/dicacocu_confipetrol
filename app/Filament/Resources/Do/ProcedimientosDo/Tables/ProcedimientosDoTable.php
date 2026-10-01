@@ -9,6 +9,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Support\Enums\IconPosition;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
@@ -40,7 +41,16 @@ class ProcedimientosDoTable
                 TextColumn::make('codigo_asignado')
                     ->label('Código')
                     ->searchable()
-                    ->placeholder('Sin codificar'),
+                    ->placeholder('Sin codificar')
+                    // Se marca cuando el código apunta a un documento del
+                    // repositorio y no solo a una ubicación escrita a mano.
+                    ->icon(fn (ProcedimientoDo $record): ?string => $record->documento_id
+                        ? 'heroicon-m-paper-clip'
+                        : null)
+                    ->iconPosition(IconPosition::After)
+                    ->tooltip(fn (ProcedimientoDo $record): ?string => $record->documento_id
+                        ? 'Enlazado al repositorio documental'
+                        : null),
                 TextColumn::make('version_actual')->label('Versión')->toggleable(),
                 TextColumn::make('cobertura_socializacion')
                     ->label('Cobertura CO')

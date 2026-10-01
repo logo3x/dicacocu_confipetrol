@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Do\ProcedimientosDo\Schemas;
 use App\Enums\Do\CriterioAmenaza;
 use App\Enums\Do\CriterioOpt;
 use App\Models\Do\Campo;
+use App\Models\Documento;
 use App\Models\User;
 use App\Services\Do\CalculadoraDo;
 use Carbon\Carbon;
@@ -226,9 +227,21 @@ class ProcedimientoDoForm
                             ->label('Título del procedimiento / instructivo')
                             ->maxLength(191)
                             ->columnSpan(2),
+                        Select::make('documento_id')
+                            ->label('Documento del repositorio')
+                            ->options(fn () => self::documentosDisponibles())
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('(aún no está en el repositorio)')
+                            ->helperText('Al elegirlo se completan el código, el título y la versión.')
+                            ->live()
+                            ->afterStateUpdated(self::copiarDatosDelDocumento(...))
+                            ->columnSpan(2),
                         TextInput::make('ubicacion_acceso')
-                            ->label('Ubicación o acceso al procedimiento')
-                            ->maxLength(191),
+                            ->label('Ubicación o acceso')
+                            ->maxLength(191)
+                            ->helperText('Úsela solo si el procedimiento no está en el repositorio.')
+                            ->columnSpan(2),
                     ]),
             ]);
     }
@@ -329,6 +342,46 @@ class ProcedimientoDoForm
                     ])
                     ->visibleOn('edit'),
             ]);
+    }
+
+    /**
+     * Documentos del repositorio que ya pasaron por aprobación: son los
+     * únicos a los que tiene sentido apuntar desde la matriz.
+     *
+     * @return array<int, string>
+     */
+    private static function documentosDisponibles(): array
+    {
+        return Documento::query()
+            ->whereIn('estado', ['aprobado', 'divulgado', 'verificado'])
+            ->orderBy('codigo')
+            ->orderBy('titulo')
+            ->get()
+            ->mapWithKeys(fn (Documento $documento): array => [
+                $documento->getKey() => trim(($documento->codigo ? $documento->codigo.' — ' : '').$documento->titulo),
+            ])
+            ->all();
+    }
+
+    /**
+     * Al enlazar un documento se traen su código, título y versión, para no
+     * escribirlos otra vez ni arriesgar que queden distintos.
+     */
+    private static function copiarDatosDelDocumento(?string $state, Set $set): void
+    {
+        if (blank($state)) {
+            return;
+        }
+
+        $documento = Documento::find($state);
+
+        if (! $documento) {
+            return;
+        }
+
+        $set('codigo_asignado', $documento->codigo);
+        $set('titulo_procedimiento', $documento->titulo);
+        $set('version_actual', $documento->version_actual);
     }
 
     /** Puntaje de prioridad en vivo a partir del estado del formulario. */

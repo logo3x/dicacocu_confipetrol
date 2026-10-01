@@ -4,6 +4,7 @@ namespace App\Models\Do;
 
 use App\Enums\Do\CriterioOpt;
 use App\Enums\Do\PrioridadDo;
+use App\Models\Documento;
 use App\Models\User;
 use Database\Factories\Do\ProcedimientoDoFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -47,7 +48,7 @@ class ProcedimientoDo extends Model
         'puntaje_prioridad', 'prioridad',
         'codificado', 'fecha_programada_codificacion', 'fecha_codificacion',
         'responsable_codificacion_id', 'codigo_asignado', 'titulo_procedimiento',
-        'version_actual', 'ubicacion_acceso',
+        'version_actual', 'ubicacion_acceso', 'documento_id',
         'fecha_ultima_divulgacion', 'personas_socializadas', 'cobertura_socializacion',
         'responsable_area_id', 'fecha_programada_verificacion', 'fecha_ejecutada_verificacion',
         'observador_operativo_id', 'observador_hseq_id', 'puntaje_opt', 'criterio_opt',
@@ -93,6 +94,17 @@ class ProcedimientoDo extends Model
     public function campo(): BelongsTo
     {
         return $this->belongsTo(Campo::class, 'campo_id');
+    }
+
+    /**
+     * Documento del repositorio donde vive este procedimiento ya
+     * estandarizado.
+     *
+     * @return BelongsTo<Documento, $this>
+     */
+    public function documento(): BelongsTo
+    {
+        return $this->belongsTo(Documento::class, 'documento_id');
     }
 
     /** @return BelongsTo<User, $this> */
