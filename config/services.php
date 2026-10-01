@@ -25,6 +25,7 @@ return [
         'tenant' => env('AZURE_TENANT_ID'),
         'proxy' => env('PROXY'),
         'dominio_permitido' => env('AZURE_DOMINIO_PERMITIDO', 'confipetrol.com'),
+        'rol_inicial' => env('AZURE_ROL_INICIAL', 'personal_tecnico'),
     ],
 
     'postmark' => [

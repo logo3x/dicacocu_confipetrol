@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use Laravel\Socialite\Facades\Socialite;
+use Spatie\Permission\Models\Role;
 use Throwable;
 
 /**
@@ -68,8 +69,10 @@ class AzureController extends Controller
 
         $usuario->save();
 
-        // Quien entra por primera vez todavía no tiene rol: sin esto Filament
-        // respondería con un 403 sin explicar qué hacer.
+        $this->asignarRolBasico($usuario);
+
+        // Si aún así no puede entrar es porque el administrador le quitó el
+        // acceso a propósito o falta sembrar los roles tras un despliegue.
         if (! $usuario->canAccessPanel(Filament::getPanel('admin'))) {
             return $this->rechazar(
                 'Su cuenta quedó registrada, pero aún no tiene permisos asignados. '
@@ -80,6 +83,31 @@ class AzureController extends Controller
         Auth::login($usuario, remember: true);
 
         return redirect()->intended(Filament::getPanel('admin')->getUrl());
+    }
+
+    /**
+     * Quien entra por primera vez empieza con el rol más básico para poder
+     * trabajar de inmediato; el administrador lo cambia después si procede.
+     * A quien ya tiene roles no se le toca: puede habérselos quitado a propósito.
+     */
+    private function asignarRolBasico(User $usuario): void
+    {
+        if ($usuario->roles()->exists()) {
+            return;
+        }
+
+        $rol = config('services.azure.rol_inicial');
+
+        if (blank($rol) || ! Role::where('name', $rol)->exists()) {
+            Log::warning('No se pudo asignar el rol inicial al entrar con Azure', [
+                'usuario' => $usuario->email,
+                'rol' => $rol,
+            ]);
+
+            return;
+        }
+
+        $usuario->assignRole($rol);
     }
 
     /** El botón solo se muestra cuando hay credenciales configuradas. */

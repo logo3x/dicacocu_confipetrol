@@ -1,5 +1,6 @@
 <?php
 
+use App\Filament\Pages\SeleccionarContrato;
 use App\Http\Controllers\Auth\AzureController;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,7 +77,49 @@ it('reutiliza el usuario existente en lugar de duplicarlo', function () {
     $this->assertAuthenticatedAs($existente->fresh());
 });
 
-it('explica al usuario sin rol por qué no puede entrar', function () {
+it('da el rol basico a quien entra por primera vez y lo deja pasar', function () {
+    rolConAcceso();
+
+    simularAzure(cuentaAzure('nueva@confipetrol.com', 'Nueva Persona'));
+
+    $this->get(route('auth.azure.callback'));
+
+    $usuario = User::where('email', 'nueva@confipetrol.com')->first();
+
+    expect($usuario->hasRole('personal_tecnico'))->toBeTrue();
+
+    $this->assertAuthenticatedAs($usuario);
+});
+
+it('lleva a indicar el contrato antes de usar el panel', function () {
+    rolConAcceso();
+
+    simularAzure(cuentaAzure('sincontrato@confipetrol.com'));
+
+    $this->get(route('auth.azure.callback'));
+
+    // Entra, pero no puede usar el panel hasta decir a que contrato pertenece.
+    $this->get('/admin')->assertRedirect(SeleccionarContrato::getUrl(panel: 'admin'));
+});
+
+it('no toca los roles de quien ya los tiene', function () {
+    rolConAcceso();
+    Permission::findOrCreate('acceder panel admin', 'web');
+    Role::findOrCreate('admin', 'web')->givePermissionTo('acceder panel admin');
+
+    $usuario = User::factory()->create(['email' => 'jefe@confipetrol.com', 'is_active' => true]);
+    $usuario->assignRole('admin');
+
+    simularAzure(cuentaAzure('jefe@confipetrol.com'));
+
+    $this->get(route('auth.azure.callback'));
+
+    expect($usuario->fresh()->getRoleNames()->all())->toBe(['admin']);
+});
+
+it('avisa en lugar de romper si el rol inicial no existe', function () {
+    config(['services.azure.rol_inicial' => 'un_rol_que_no_existe']);
+
     simularAzure(cuentaAzure('sinrol@confipetrol.com', 'Sin Rol'));
 
     $this->get(route('auth.azure.callback'))
