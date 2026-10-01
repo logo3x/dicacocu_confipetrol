@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\Documentos\Tables;
 
 use App\Filament\Resources\Documentos\DocumentoResource;
+use App\Filament\Resources\Documentos\Schemas\DocumentoForm;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
@@ -27,13 +28,15 @@ class DocumentosTable
                     ->sortable()
                     ->fontFamily('mono')
                     ->copyable()
+                    ->grow(false)
                     ->placeholder('—'),
 
                 TextColumn::make('titulo')
                     ->label('Título')
                     ->searchable()
-                    ->limit(55)
-                    ->tooltip(fn ($record) => $record->titulo),
+                    ->limit(45)
+                    ->tooltip(fn ($record) => $record->titulo)
+                    ->description(fn ($record) => $record->carpeta?->nombre),
 
                 TextColumn::make('tipo_documento')
                     ->label('Tipo')
@@ -87,19 +90,21 @@ class DocumentosTable
                 TextColumn::make('carpeta.nombre')
                     ->label('Carpeta')
                     ->searchable()
-                    ->toggleable(),
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('version_actual')
                     ->label('Ver.')
                     ->numeric()
                     ->sortable()
                     ->alignCenter()
-                    ->prefix('v'),
+                    ->prefix('v')
+                    ->toggleable(),
 
                 IconColumn::make('confidencial')
                     ->label('Conf.')
                     ->boolean()
-                    ->alignCenter(),
+                    ->alignCenter()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
                 TextColumn::make('fecha_vencimiento')
                     ->label('Vencimiento')
@@ -118,25 +123,11 @@ class DocumentosTable
             ->filters([
                 SelectFilter::make('estado')
                     ->label('Estado')
-                    ->options([
-                        'borrador' => 'Borrador',
-                        'en_revision' => 'En revisión',
-                        'aprobado' => 'Aprobado',
-                        'divulgado' => 'Divulgado',
-                        'verificado' => 'Verificado',
-                        'rechazado' => 'Rechazado',
-                    ]),
+                    ->options(DocumentoForm::estadosDelDocumento()),
 
                 SelectFilter::make('tipo_documento')
                     ->label('Tipo')
-                    ->options([
-                        'procedimiento' => 'Procedimiento',
-                        'instructivo' => 'Instructivo',
-                        'formato' => 'Formato',
-                        'manual' => 'Manual',
-                        'politica' => 'Política',
-                        'norma' => 'Norma',
-                    ]),
+                    ->options(DocumentoForm::tiposDeDocumento()),
 
                 TrashedFilter::make(),
             ])
