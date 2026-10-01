@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\CarpetaFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -30,7 +31,7 @@ class Carpeta extends Model
     {
         return [
             'is_public' => 'boolean',
-            'orden'     => 'integer',
+            'orden' => 'integer',
         ];
     }
 
@@ -52,5 +53,44 @@ class Carpeta extends Model
     public function documentos(): HasMany
     {
         return $this->hasMany(Documento::class);
+    }
+
+    /** Carpetas sin padre: el primer nivel del árbol. */
+    public function scopeRaices(Builder $consulta): Builder
+    {
+        return $consulta->whereNull('parent_id');
+    }
+
+    /**
+     * Cuántos niveles hay por encima de esta carpeta. Una raíz está en 0.
+     * Se detiene a los 10 niveles por si un dato corrupto encadena un ciclo.
+     */
+    public function profundidad(): int
+    {
+        $niveles = 0;
+        $actual = $this->parent;
+
+        while ($actual && $niveles < 10) {
+            $niveles++;
+            $actual = $actual->parent;
+        }
+
+        return $niveles;
+    }
+
+    /** Ruta legible desde la raíz, por ejemplo "HSEQ / Procedimientos". */
+    public function rutaCompleta(string $separador = ' / '): string
+    {
+        $nombres = [$this->nombre];
+        $actual = $this->parent;
+        $vueltas = 0;
+
+        while ($actual && $vueltas < 10) {
+            array_unshift($nombres, $actual->nombre);
+            $actual = $actual->parent;
+            $vueltas++;
+        }
+
+        return implode($separador, $nombres);
     }
 }
