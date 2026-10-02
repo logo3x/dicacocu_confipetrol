@@ -5,6 +5,7 @@ namespace App\Filament\Resources\Do\ProcedimientosDo\Schemas;
 use App\Enums\Do\CriterioAmenaza;
 use App\Enums\Do\CriterioOpt;
 use App\Models\Do\Campo;
+use App\Models\Do\ProcedimientoDo;
 use App\Models\Documento;
 use App\Models\User;
 use App\Services\Do\CalculadoraDo;
@@ -130,6 +131,11 @@ class ProcedimientoDoForm
                             ->required()
                             ->maxLength(191)
                             ->columnSpan(2),
+                        TextInput::make('categoria_cargo')
+                            ->label('Categoría o cargo')
+                            ->maxLength(191)
+                            ->datalist(fn (): array => ProcedimientoDo::categoriasRegistradas())
+                            ->helperText('A qué personal aplica. Determina a quién se le divulga.'),
                         DatePicker::make('fecha_identificacion')
                             ->label('Fecha de identificación')
                             ->required()

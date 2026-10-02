@@ -38,6 +38,11 @@ class ProcedimientosDoTable
                     ->formatStateUsing(fn (PrioridadDo $state) => $state->label())
                     ->color(fn (PrioridadDo $state) => $state->color())
                     ->sortable(),
+                TextColumn::make('categoria_cargo')
+                    ->label('Categoría')
+                    ->searchable()
+                    ->placeholder('—')
+                    ->toggleable(),
                 TextColumn::make('codigo_asignado')
                     ->label('Código')
                     ->searchable()

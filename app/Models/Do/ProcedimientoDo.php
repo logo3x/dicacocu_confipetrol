@@ -42,7 +42,7 @@ class ProcedimientoDo extends Model
     /** Campos cuyo cambio queda registrado en el historial. */
     public const CAMPOS_AUDITADOS = [
         'anio_ciclo', 'contrato_id', 'campo_id',
-        'nombre_actividad', 'fecha_identificacion', 'personas_involucradas',
+        'nombre_actividad', 'categoria_cargo', 'fecha_identificacion', 'personas_involucradas',
         'amenaza_riesgo_critico', 'amenaza_equipos_criticos', 'amenaza_impacto_ambiental',
         'amenaza_antecedentes', 'amenaza_afecta_servicio', 'amenaza_no_rutinaria',
         'puntaje_prioridad', 'prioridad',
@@ -94,6 +94,22 @@ class ProcedimientoDo extends Model
     public function campo(): BelongsTo
     {
         return $this->belongsTo(Campo::class, 'campo_id');
+    }
+
+    /**
+     * Categorías ya usadas, para sugerirlas al escribir y que no proliferen
+     * variantes del mismo cargo.
+     *
+     * @return array<int, string>
+     */
+    public static function categoriasRegistradas(): array
+    {
+        return static::query()
+            ->whereNotNull('categoria_cargo')
+            ->distinct()
+            ->orderBy('categoria_cargo')
+            ->pluck('categoria_cargo')
+            ->all();
     }
 
     /**
