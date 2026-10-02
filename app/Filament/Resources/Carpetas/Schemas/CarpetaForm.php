@@ -106,7 +106,8 @@ class CarpetaForm
     {
         return Carpeta::query()
             ->when($carpeta?->exists, fn ($consulta) => $consulta->whereKeyNot($carpeta->getKey()))
-            ->with('parent')
+            // rutaCompleta() sube por la cadena de padres en cada opción.
+            ->with('parent.parent.parent')
             ->orderBy('nombre')
             ->get()
             ->mapWithKeys(fn (Carpeta $opcion) => [$opcion->getKey() => $opcion->rutaCompleta()])

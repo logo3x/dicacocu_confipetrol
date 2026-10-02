@@ -80,6 +80,11 @@ class AzureController extends Controller
             );
         }
 
+        // Se renueva el identificador de sesión antes de autenticar para que
+        // una sesión preparada por un tercero no quede autenticada como esta
+        // persona (fijación de sesión).
+        request()->session()->regenerate();
+
         Auth::login($usuario, remember: true);
 
         return redirect()->intended(Filament::getPanel('admin')->getUrl());

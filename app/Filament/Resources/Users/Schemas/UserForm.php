@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Users\Schemas;
 
 use App\Enums\RolSistema;
 use App\Models\Do\Campo;
+use App\Models\User;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -11,6 +12,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Permission\Models\Role;
 
 class UserForm
@@ -75,14 +77,30 @@ class UserForm
                     ->schema([
                         Select::make('roles')
                             ->label('Rol')
-                            ->relationship('roles', 'name')
+                            // Solo un super_admin puede repartir ese rol, y
+                            // nadie cambia el suyo propio: de lo contrario
+                            // cualquiera se ascendería editando su ficha.
+                            ->relationship(
+                                'roles',
+                                'name',
+                                fn (Builder $query) => auth()->user()?->hasRole(RolSistema::SuperAdmin->value)
+                                    ? $query
+                                    : $query->whereNot('name', RolSistema::SuperAdmin->value),
+                            )
                             ->getOptionLabelFromRecordUsing(fn (Role $rol): string => RolSistema::etiqueta($rol->name))
                             ->multiple()
                             ->preload()
-                            ->searchable(),
+                            ->searchable()
+                            ->disabled(fn (?User $record): bool => $record !== null && auth()->user()?->is($record))
+                            ->helperText(fn (?User $record): ?string => $record !== null && auth()->user()?->is($record)
+                                ? 'No puede cambiar su propio rol.'
+                                : null),
 
                         Toggle::make('is_active')
                             ->label('Usuario activo')
+                            // Desactivarse a si mismo deja fuera del panel al
+                            // propio administrador que lo hace.
+                            ->disabled(fn (?User $record): bool => $record !== null && auth()->user()?->is($record))
                             ->default(true),
                     ]),
             ]);

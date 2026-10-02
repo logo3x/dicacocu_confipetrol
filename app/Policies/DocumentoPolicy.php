@@ -18,13 +18,15 @@ class DocumentoPolicy
             return false;
         }
 
-        // Documentos confidenciales solo para creador, responsable y aprobador
+        // Documentos confidenciales solo para creador, responsable y aprobador.
+        // Mismo criterio que Documento::scopeVisiblePara(), que lo aplica a los
+        // listados: si cambia uno, debe cambiar el otro.
         if ($documento->confidencial) {
             return in_array($user->id, [
                 $documento->created_by,
                 $documento->responsable_id,
                 $documento->aprobador_id,
-            ], true) || $user->hasRole(['super_admin', 'admin']);
+            ], true) || $user->can('ver documentos confidenciales');
         }
 
         return true;

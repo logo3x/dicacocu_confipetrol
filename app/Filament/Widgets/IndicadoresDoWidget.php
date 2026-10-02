@@ -6,6 +6,7 @@ use App\Services\Do\IndicadoresDoService;
 use App\Support\Do\IndicadoresDo;
 use Filament\Widgets\StatsOverviewWidget as BaseStatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -63,14 +64,40 @@ class IndicadoresDoWidget extends BaseStatsOverviewWidget
 
     private function indicadores(): IndicadoresDo
     {
+        $usuario = Auth::user();
+
+        // Cada quien ve los indicadores de su contrato, igual que el resto del
+        // módulo. La clave de caché lleva el contrato: una clave común haría
+        // que un usuario viera las cifras de otro.
+        $contratoId = $usuario?->veTodosLosContratos() ? null : $usuario?->contrato_id;
+
         // Se cachean valores escalares: un objeto serializado se recupera como
         // __PHP_Incomplete_Class si la clase cambia entre despliegues.
         $datos = Cache::remember(
-            'do_indicadores_procedimientos',
+            self::claveCache($contratoId),
             60,
-            fn () => (array) IndicadoresDoService::calcular(),
+            fn () => (array) IndicadoresDoService::calcular(contratoId: $contratoId),
         );
 
         return new IndicadoresDo(...$datos);
+    }
+
+    /** Clave de caché por contrato, para no mezclar cifras entre ellos. */
+    public static function claveCache(?int $contratoId): string
+    {
+        return 'do_indicadores_procedimientos:'.($contratoId ?? 'global');
+    }
+
+    /**
+     * Invalida las cifras afectadas por un cambio: las del contrato y las
+     * globales que ven los administradores.
+     */
+    public static function olvidarCache(?int $contratoId = null): void
+    {
+        Cache::forget(self::claveCache(null));
+
+        if ($contratoId !== null) {
+            Cache::forget(self::claveCache($contratoId));
+        }
     }
 }

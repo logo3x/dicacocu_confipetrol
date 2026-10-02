@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Do\ProcedimientoDo;
 use Database\Factories\DocumentoFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -128,5 +129,35 @@ class Documento extends Model implements HasMedia
     public function estaVencido(): bool
     {
         return $this->fecha_vencimiento !== null && $this->fecha_vencimiento->isPast();
+    }
+
+    /**
+     * Documentos que esta persona puede ver en un listado o búsqueda.
+     *
+     * Replica el criterio de DocumentoPolicy::view() a nivel de consulta: sin
+     * esto un confidencial no se puede abrir, pero su título, código y
+     * descripción sí aparecen en los listados.
+     *
+     * @param  Builder<Documento>  $consulta
+     * @return Builder<Documento>
+     */
+    public function scopeVisiblePara(Builder $consulta, ?User $usuario): Builder
+    {
+        if ($usuario === null) {
+            return $consulta->where('confidencial', false);
+        }
+
+        if ($usuario->can('ver documentos confidenciales')) {
+            return $consulta;
+        }
+
+        return $consulta->where(fn (Builder $q) => $q
+            ->where('confidencial', false)
+            ->orWhere(fn (Builder $propios) => $propios
+                ->where('confidencial', true)
+                ->where(fn (Builder $suyo) => $suyo
+                    ->where('created_by', $usuario->getKey())
+                    ->orWhere('responsable_id', $usuario->getKey())
+                    ->orWhere('aprobador_id', $usuario->getKey()))));
     }
 }

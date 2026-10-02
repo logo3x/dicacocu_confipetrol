@@ -15,12 +15,17 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
 
 class DocumentosTable
 {
     public static function configure(Table $table): Table
     {
         return $table
+            // El título muestra la carpeta como subtítulo y hay columna de
+            // responsable: sin esto cada fila dispara sus propias consultas.
+            ->modifyQueryUsing(fn (Builder $query) => $query
+                ->with(['carpeta:id,nombre', 'responsable:id,name']))
             ->columns([
                 TextColumn::make('codigo')
                     ->label('Código')

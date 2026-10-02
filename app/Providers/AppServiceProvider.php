@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\AcompanamientoVerificacion;
 use App\Models\Actividad;
+use App\Models\Carpeta;
 use App\Models\Compromiso;
 use App\Models\Do\Campo;
 use App\Models\Do\Contrato;
@@ -12,6 +13,7 @@ use App\Models\Do\ProcedimientoDo;
 use App\Models\Documento;
 use App\Models\InspeccionGerencialAccion;
 use App\Models\InspeccionGerencialRegla;
+use App\Models\User;
 use App\Observers\AcompanamientoVerificacionObserver;
 use App\Observers\ActividadObserver;
 use App\Observers\CompromisoObserver;
@@ -22,6 +24,7 @@ use App\Observers\InspeccionGerencialAccionObserver;
 use App\Observers\InspeccionGerencialReglaObserver;
 use App\Policies\AcompanamientoVerificacionPolicy;
 use App\Policies\ActividadPolicy;
+use App\Policies\CarpetaPolicy;
 use App\Policies\CompromisoPolicy;
 use App\Policies\Do\CampoPolicy;
 use App\Policies\Do\ContratoPolicy;
@@ -30,6 +33,7 @@ use App\Policies\Do\ProcedimientoDoPolicy;
 use App\Policies\DocumentoPolicy;
 use App\Policies\InspeccionGerencialAccionPolicy;
 use App\Policies\InspeccionGerencialReglaPolicy;
+use App\Policies\UserPolicy;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Gate;
@@ -52,6 +56,8 @@ class AppServiceProvider extends AuthServiceProvider
         EvaluacionF14::class => EvaluacionF14Policy::class,
         Contrato::class => ContratoPolicy::class,
         Campo::class => CampoPolicy::class,
+        Carpeta::class => CarpetaPolicy::class,
+        User::class => UserPolicy::class,
     ];
 
     public function register(): void {}

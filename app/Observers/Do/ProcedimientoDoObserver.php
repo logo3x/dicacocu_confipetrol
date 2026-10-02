@@ -3,9 +3,9 @@
 namespace App\Observers\Do;
 
 use App\Enums\Do\CriterioAmenaza;
+use App\Filament\Widgets\IndicadoresDoWidget;
 use App\Models\Do\ProcedimientoDo;
 use App\Services\Do\CalculadoraDo;
-use Illuminate\Support\Facades\Cache;
 
 class ProcedimientoDoObserver
 {
@@ -36,10 +36,15 @@ class ProcedimientoDoObserver
             $procedimiento->personas_socializadas = $procedimiento->personas_involucradas;
         }
 
-        $procedimiento->cobertura_socializacion = CalculadoraDo::coberturaSocializacion(
-            $procedimiento->personas_socializadas,
-            $procedimiento->personas_involucradas,
-        );
+        // La cobertura solo cuenta desde que hubo divulgación. Sin esta
+        // condición, un procedimiento recién inventariado nacía al 100 % e
+        // inflaba el indicador CO sin que nadie hubiera socializado nada.
+        $procedimiento->cobertura_socializacion = $procedimiento->fecha_ultima_divulgacion
+            ? CalculadoraDo::coberturaSocializacion(
+                $procedimiento->personas_socializadas,
+                $procedimiento->personas_involucradas,
+            )
+            : 0.0;
     }
 
     public function created(ProcedimientoDo $procedimiento): void
@@ -69,7 +74,7 @@ class ProcedimientoDoObserver
             'old' => array_intersect_key($procedimiento->getOriginal(), array_flip(ProcedimientoDo::CAMPOS_AUDITADOS)),
         ]);
 
-        Cache::forget('do_indicadores_procedimientos');
+        IndicadoresDoWidget::olvidarCache($procedimiento->contrato_id);
     }
 
     public function restored(ProcedimientoDo $procedimiento): void
@@ -79,7 +84,7 @@ class ProcedimientoDoObserver
 
     public function saved(ProcedimientoDo $procedimiento): void
     {
-        Cache::forget('do_indicadores_procedimientos');
+        IndicadoresDoWidget::olvidarCache($procedimiento->contrato_id);
     }
 
     /**

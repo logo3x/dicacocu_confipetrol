@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Do\Campo;
+use App\Models\Do\Contrato;
 use App\Models\Do\EvaluacionF14;
 use App\Models\Do\ProcedimientoDo;
 use App\Models\User;
@@ -131,4 +133,43 @@ it('no avisa a usuarios inactivos', function () {
     $procedimiento = ProcedimientoDo::factory()->create(['responsable_area_id' => $inactivo->id]);
 
     expect(DestinatariosDo::para($procedimiento)->pluck('id'))->not->toContain($inactivo->id);
+});
+
+it('vuelve a avisar cuando se programa una nueva ronda de verificacion', function () {
+    Notification::fake();
+
+    $responsable = User::factory()->create(['is_active' => true]);
+
+    // Ya se verificó una vez; ahora hay programada una ronda posterior.
+    ProcedimientoDo::factory()->prioridadAlta()->estandarizado()->create([
+        'responsable_area_id' => $responsable->id,
+        'fecha_ejecutada_verificacion' => now()->subMonths(6),
+        'fecha_programada_verificacion' => now()->subWeek(),
+    ]);
+
+    $this->artisan('do:avisar-plazos')->assertSuccessful();
+
+    Notification::assertSentTo($responsable, PlazoVencido::class);
+});
+
+it('no confunde el aviso de un procedimiento con el de otro cuyo id lo contiene', function () {
+    $responsable = User::factory()->create(['is_active' => true]);
+
+    $contrato = Contrato::factory()->create();
+    $campo = Campo::factory()->create(['contrato_id' => $contrato->id]);
+
+    $procedimientos = collect(range(1, 12))->map(fn () => ProcedimientoDo::factory()
+        ->prioridadAlta()
+        ->create([
+            'contrato_id' => $contrato->id,
+            'campo_id' => $campo->id,
+            'responsable_area_id' => $responsable->id,
+            'fecha_identificacion' => now()->subMonths(4),
+        ]));
+
+    $this->artisan('do:avisar-plazos')->assertSuccessful();
+
+    // Cada procedimiento recibe su propio aviso: buscar "…:1" no debe casar
+    // con el 12 y saltarse el del 1.
+    expect($responsable->notifications()->count())->toBe($procedimientos->count());
 });

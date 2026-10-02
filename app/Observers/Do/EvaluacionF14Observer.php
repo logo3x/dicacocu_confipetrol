@@ -3,11 +3,11 @@
 namespace App\Observers\Do;
 
 use App\Enums\Do\CriterioOpt;
+use App\Filament\Widgets\IndicadoresDoWidget;
 use App\Models\Do\EvaluacionF14;
 use App\Notifications\Do\VerificacionDeficiente;
 use App\Services\Do\CalculadoraDo;
 use App\Services\Do\DestinatariosDo;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Notification;
 
 class EvaluacionF14Observer
@@ -36,6 +36,12 @@ class EvaluacionF14Observer
     }
 
     public function deleted(EvaluacionF14 $evaluacion): void
+    {
+        $this->actualizarProcedimiento($evaluacion);
+    }
+
+    /** Al recuperar una evaluación vuelve a contar para el promedio OPT. */
+    public function restored(EvaluacionF14 $evaluacion): void
     {
         $this->actualizarProcedimiento($evaluacion);
     }
@@ -92,6 +98,6 @@ class EvaluacionF14Observer
             'fecha_ejecutada_verificacion' => $agregado?->ultima_ejecucion,
         ])->saveQuietly();
 
-        Cache::forget('do_indicadores_procedimientos');
+        IndicadoresDoWidget::olvidarCache($procedimiento->contrato_id);
     }
 }

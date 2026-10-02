@@ -17,6 +17,11 @@ beforeEach(function () {
     Role::firstOrCreate(['name' => 'admin', 'guard_name' => 'web']);
     Role::firstOrCreate(['name' => 'responsable_hseq', 'guard_name' => 'web']);
     Permission::firstOrCreate(['name' => 'acceder panel admin', 'guard_name' => 'web']);
+
+    // El acceso a confidenciales va por permiso, no por nombre de rol.
+    $confidenciales = Permission::firstOrCreate(['name' => 'ver documentos confidenciales', 'guard_name' => 'web']);
+    Role::findByName('super_admin', 'web')->givePermissionTo($confidenciales);
+    Role::findByName('admin', 'web')->givePermissionTo($confidenciales);
 });
 
 // ── viewAny ───────────────────────────────────────────────────────────────────

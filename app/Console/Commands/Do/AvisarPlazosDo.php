@@ -112,10 +112,17 @@ class AvisarPlazosDo extends Command
                 ->where(fn (Builder $sin) => $sin
                     ->whereNull('codigo_asignado')
                     ->whereNotNull('fecha_limite_estandarizacion'))
+                // Pendiente de verificar es tanto el que nunca se verificó
+                // como el que ya tiene programada una ronda posterior a la
+                // última ejecutada. Exigir que la fecha ejecutada estuviera
+                // vacía dejaba al procedimiento sin avisos para siempre
+                // después de su primera F-14.
                 ->orWhere(fn (Builder $con) => $con
                     ->whereNotNull('codigo_asignado')
                     ->whereNotNull('fecha_programada_verificacion')
-                    ->whereNull('fecha_ejecutada_verificacion')));
+                    ->where(fn (Builder $ronda) => $ronda
+                        ->whereNull('fecha_ejecutada_verificacion')
+                        ->orWhereColumn('fecha_ejecutada_verificacion', '<', 'fecha_programada_verificacion'))));
     }
 
     /** La fecha que corresponde según la etapa en la que está. */
@@ -167,7 +174,12 @@ class AvisarPlazosDo extends Command
             ->where('notifiable_id', $usuarioId)
             ->where('type', $tipo)
             ->whereDate('created_at', Carbon::today())
-            ->where('data', 'like', '%"procedimiento_id":'.$procedimiento->getKey().'%')
+            // El patrón se cierra con la coma o la llave que siguen al número:
+            // buscar solo "…:1" casaría también con 12, 13 o 100 y se saltaría
+            // el aviso del procedimiento 1.
+            ->where(fn ($consulta) => $consulta
+                ->where('data', 'like', '%"procedimiento_id":'.$procedimiento->getKey().',%')
+                ->orWhere('data', 'like', '%"procedimiento_id":'.$procedimiento->getKey().'}%'))
             ->exists();
     }
 }

@@ -7,6 +7,7 @@ use BackedEnum;
 use Filament\Pages\Page;
 use Filament\Support\Icons\Heroicon;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Url;
 
@@ -45,7 +46,10 @@ class BuscadorPage extends Page
         }
 
         $query = Documento::query()
-            ->with(['creador', 'carpeta', 'responsable'])
+            // El buscador llega a cualquiera con acceso al panel: sin este
+            // filtro un confidencial asomaría con título y descripción.
+            ->visiblePara(Auth::user())
+            ->with(['creador:id,name', 'carpeta:id,nombre', 'responsable:id,name'])
             ->whereIn('estado', ['aprobado', 'divulgado', 'verificado']);
 
         if (strlen($this->busqueda) >= 2) {

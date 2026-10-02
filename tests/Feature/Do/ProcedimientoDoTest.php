@@ -35,8 +35,25 @@ it('usa el personal involucrado como valor por defecto de socializados', functio
         'personas_socializadas' => null,
     ]);
 
+    // Se sugiere el total de involucrados, pero mientras no haya divulgación
+    // la cobertura es 0: si no, un procedimiento recién inventariado nacería
+    // al 100 % e inflaría el indicador CO.
     expect($procedimiento->personas_socializadas)->toBe(20)
-        ->and((float) $procedimiento->cobertura_socializacion)->toBe(100.0);
+        ->and((float) $procedimiento->cobertura_socializacion)->toBe(0.0);
+});
+
+it('cuenta la cobertura desde que se registra la divulgación', function () {
+    $procedimiento = ProcedimientoDo::factory()->create([
+        'personas_involucradas' => 20,
+        'personas_socializadas' => 20,
+        'fecha_ultima_divulgacion' => null,
+    ]);
+
+    expect((float) $procedimiento->cobertura_socializacion)->toBe(0.0);
+
+    $procedimiento->update(['fecha_ultima_divulgacion' => now()]);
+
+    expect((float) $procedimiento->fresh()->cobertura_socializacion)->toBe(100.0);
 });
 
 it('respeta que se vacíe el personal socializado al editar', function () {
@@ -82,6 +99,7 @@ it('recalcula la cobertura cuando se edita el personal socializado', function ()
     $procedimiento = ProcedimientoDo::factory()->create([
         'personas_involucradas' => 20,
         'personas_socializadas' => 20,
+        'fecha_ultima_divulgacion' => now(),
     ]);
 
     $procedimiento->update(['personas_socializadas' => 15]);

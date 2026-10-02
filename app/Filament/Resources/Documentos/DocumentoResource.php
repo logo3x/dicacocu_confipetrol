@@ -18,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Auth;
 
 class DocumentoResource extends Resource
 {
@@ -34,6 +35,15 @@ class DocumentoResource extends Resource
     protected static ?string $modelLabel = 'Documento';
 
     protected static ?string $pluralModelLabel = 'Documentos';
+
+    /**
+     * Un documento confidencial no debe asomar en el listado aunque no se
+     * pueda abrir: el título, el código y la descripción ya dicen demasiado.
+     */
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->visiblePara(Auth::user());
+    }
 
     public static function form(Schema $schema): Schema
     {

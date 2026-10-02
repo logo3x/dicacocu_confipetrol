@@ -23,6 +23,10 @@ class CarpetasTable
         return $table
             // Las subcarpetas quedan justo debajo de su carpeta superior.
             ->modifyQueryUsing(fn (Builder $query) => $query
+                // La sangría necesita saber a qué nivel está cada carpeta, y
+                // profundidad() sube por la cadena de padres. Sin precargarla,
+                // cada fila dispara una consulta por nivel.
+                ->with('parent.parent.parent')
                 ->orderBy('parent_id')
                 ->orderBy('orden')
                 ->orderBy('nombre'))
