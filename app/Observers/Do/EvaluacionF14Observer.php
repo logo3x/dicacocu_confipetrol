@@ -2,9 +2,13 @@
 
 namespace App\Observers\Do;
 
+use App\Enums\Do\CriterioOpt;
 use App\Models\Do\EvaluacionF14;
+use App\Notifications\Do\VerificacionDeficiente;
 use App\Services\Do\CalculadoraDo;
+use App\Services\Do\DestinatariosDo;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Notification;
 
 class EvaluacionF14Observer
 {
@@ -26,9 +30,41 @@ class EvaluacionF14Observer
         $this->actualizarProcedimiento($evaluacion);
     }
 
+    public function created(EvaluacionF14 $evaluacion): void
+    {
+        $this->avisarSiElResultadoEsBajo($evaluacion);
+    }
+
     public function deleted(EvaluacionF14 $evaluacion): void
     {
         $this->actualizarProcedimiento($evaluacion);
+    }
+
+    /**
+     * Un resultado bajo exige levantar un plan de acción, así que se avisa a
+     * quienes acompañan el procedimiento.
+     *
+     * Se notifica solo en Deficiente y Regular: incluir "Bueno" llenaría la
+     * campana de avisos que nadie atiende.
+     */
+    private function avisarSiElResultadoEsBajo(EvaluacionF14 $evaluacion): void
+    {
+        $criterio = $evaluacion->criterio_opt;
+
+        if (! in_array($criterio, [CriterioOpt::Deficiente, CriterioOpt::Regular], true)) {
+            return;
+        }
+
+        $procedimiento = $evaluacion->procedimiento;
+
+        if (! $procedimiento) {
+            return;
+        }
+
+        Notification::send(
+            DestinatariosDo::para($procedimiento),
+            new VerificacionDeficiente($evaluacion),
+        );
     }
 
     /**
